@@ -7,7 +7,10 @@ import pytz
 
 from django.conf import settings
 
-DATA_DIR = os.path.join(settings.STATIC_ROOT, 'ajalugu/data/')
+try:
+    DATA_DIR = os.path.join(settings.STATIC_ROOT, 'ajalugu/data/')
+except:
+    DATA_DIR = os.path.join(os.getcwd(), 'static/ajalugu/data/')
 
 def listdir_fullpath(d):
     return [os.path.join(d, f) for f in os.listdir(d)]
