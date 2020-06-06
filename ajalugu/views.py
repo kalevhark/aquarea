@@ -20,7 +20,12 @@ bdn = Aquarea.NordPoolData()
 class AquareaApp():
     def __init__(self):
         print('init')
-
+        print(
+            bda.tunniandmed().index.max(),
+            bde.tunniandmed().index.max(),
+            bdi.tunniandmed().index.max(),
+            bdn.tunniandmed().index.max(),
+        )
         # Hiliseim aeg täielike andmetega:
         date_max_ceiling = min(
             bda.tunniandmed().index.max(),

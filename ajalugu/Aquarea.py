@@ -8,9 +8,9 @@ import pytz
 from django.conf import settings
 
 try:
-    DATA_DIR = os.path.join(settings.STATIC_ROOT, 'ajalugu/data/')
+    DATA_DIR = os.path.join(settings.STATIC_ROOT, 'data')
 except:
-    DATA_DIR = os.path.join(os.getcwd(), 'static/ajalugu/data/')
+    DATA_DIR = os.path.join(os.getcwd(), 'static/data/')
 
 def listdir_fullpath(d):
     return [os.path.join(d, f) for f in os.listdir(d)]
@@ -37,13 +37,14 @@ class EEYldHindData():
     
     def __init__(self):
         print('EE/EL ', end='')
-        bd_DATA_DIR = DATA_DIR + 'bdy/'
+        bd_DATA_DIR = os.path.join(DATA_DIR, 'bdy')
         ajf = []
         with os.scandir(bd_DATA_DIR) as it:
             for entry in it:
                 if entry.name.startswith(
                         'EE_yldhind') and entry.is_file():  # Loeme ainult Aquarea logifailid andmefreimidesse
-                    fail = bd_DATA_DIR + entry.name
+
+                    fail = os.path.join(bd_DATA_DIR, entry.name)
                     print('Loeme faili: ', fail)
                     ajf.append(pd.read_csv(fail, skiprows=1, delimiter=';', decimal=','))
         self.af = pd.concat(ajf[:], axis=0).drop_duplicates() # Ühendame andmefreimid ja kõrvaldame duplikaadid
@@ -117,10 +118,11 @@ class AquareaData():
     
     def __init__(self):
         print('Aquarea ', end='')
-        bd_DATA_DIR = DATA_DIR+'bda/'
-        if os.path.isfile(bd_DATA_DIR + 'af.pickle'):
+        bd_DATA_DIR = os.path.join(DATA_DIR, 'bda')
+        pickle_file_name = os.path.join(bd_DATA_DIR, 'af.pickle')
+        if os.path.isfile(pickle_file_name):
             algus = datetime.now()
-            with open(bd_DATA_DIR + 'af.pickle', 'rb') as f:
+            with open(pickle_file_name, 'rb') as f:
                 # The protocol version used is detected automatically, so we do not
                 # have to specify it.
                 self.af = pickle.load(f)
@@ -131,8 +133,9 @@ class AquareaData():
             ajf = []
             with os.scandir(bd_DATA_DIR) as it:
                 for entry in it:
+                    print(entry)
                     if entry.name.startswith('Statistics_B197792584') and entry.is_file(): # Loeme ainult Aquarea logifailid andmefreimidesse
-                        fail = bd_DATA_DIR + entry.name
+                        fail = os.path.join(bd_DATA_DIR, entry.name)
                         print('Loeme faili: ', fail)
                         ajf.append(pd.read_csv(fail, delimiter=',', decimal='.', parse_dates=[0],
                                  usecols=[0,1,3,8,9,12,13,17,19,20,21,22,25,32,34,35,36,37,38,40,42,45,47,49,50,51,57,58,59,66,67,70,71],))
@@ -142,7 +145,7 @@ class AquareaData():
             self.af = self.af.set_index('Timestamp')
 
             # Kirjutame andmed pickle faili
-            with open(bd_DATA_DIR + 'af.pickle', 'wb') as f:
+            with open(pickle_file_name, 'wb') as f:
                 # Pickle the 'data' dictionary using the highest protocol available.
                 pickle.dump(self.af, f, pickle.HIGHEST_PROTOCOL)
             aeg = datetime.now() - algus
@@ -241,10 +244,11 @@ class ElektrileviData():
     
     def __init__(self):
         print('Elektrilevi ', end='')
-        bd_DATA_DIR = DATA_DIR + 'bde/'
-        if os.path.isfile(bd_DATA_DIR + 'af.pickle'):
+        bd_DATA_DIR = os.path.join(DATA_DIR, 'bde')
+        pickle_file_name = os.path.join(bd_DATA_DIR, 'af.pickle')
+        if os.path.isfile(pickle_file_name):
             algus = datetime.now()
-            with open(bd_DATA_DIR + 'af.pickle', 'rb') as f:
+            with open(pickle_file_name, 'rb') as f:
                 # The protocol version used is detected automatically, so we do not
                 # have to specify it.
                 self.af = pickle.load(f)
@@ -257,7 +261,7 @@ class ElektrileviData():
                 for entry in it:
                     if entry.name.startswith(
                             'Elektrilevi_S9a') and entry.is_file():  # Loeme ainult Elektrilevi logifailid andmefreimidesse
-                        fail = bd_DATA_DIR + entry.name
+                        fail = os.path.join(bd_DATA_DIR, entry.name)
                         print('Loeme faili: ', fail)
                         ajf.append(pd.read_csv(fail, delimiter=';',
                                  skiprows=6, header=None, names = ['Timestamp','Elektrienergia kulu [kWh]'], # Jätame ära algusread ja nimetame ise veerud
@@ -268,7 +272,7 @@ class ElektrileviData():
             self.af = self.af.set_index('Timestamp')
 
             # Kirjutame andmed pickle faili
-            with open(bd_DATA_DIR + 'af.pickle', 'wb') as f:
+            with open(pickle_file_name, 'wb') as f:
                 # Pickle the 'data' dictionary using the highest protocol available.
                 pickle.dump(self.af, f, pickle.HIGHEST_PROTOCOL)
             aeg = datetime.now() - algus
@@ -326,10 +330,11 @@ class IlmateenistusData():
     
     def __init__(self):
         print('Ilmateenistus ', end='')
-        bd_DATA_DIR = DATA_DIR + 'bdi/'
-        if os.path.isfile(bd_DATA_DIR + 'af.pickle'):
+        bd_DATA_DIR = os.path.join(DATA_DIR, 'bdi')
+        pickle_file_name = os.path.join(bd_DATA_DIR, 'af.pickle')
+        if os.path.isfile(pickle_file_name):
             algus = datetime.now()
-            with open(bd_DATA_DIR + 'af.pickle', 'rb') as f:
+            with open(pickle_file_name, 'rb') as f:
                 # The protocol version used is detected automatically, so we do not
                 # have to specify it.
                 self.af = pickle.load(f)
@@ -342,7 +347,7 @@ class IlmateenistusData():
                 for entry in it:
                     if entry.name.startswith(
                             'Ilmateenistus_Valga') and entry.is_file():  # Loeme ainult Elektrilevi logifailid andmefreimidesse
-                        fail = bd_DATA_DIR + entry.name
+                        fail = os.path.join(bd_DATA_DIR, entry.name)
                         print('Loeme faili: ', fail)
                         ajf.append(pd.read_csv(fail, delimiter=',',
                             skiprows=1, header=None, decimal = '.',
@@ -353,7 +358,7 @@ class IlmateenistusData():
             self.af = self.af.set_index('Timestamp')
 
             # Kirjutame andmed pickle faili
-            with open(bd_DATA_DIR + 'af.pickle', 'wb') as f:
+            with open(pickle_file_name, 'wb') as f:
                 # Pickle the 'data' dictionary using the highest protocol available.
                 pickle.dump(self.af, f, pickle.HIGHEST_PROTOCOL)
             aeg = datetime.now() - algus
@@ -408,10 +413,11 @@ class NordPoolData():
     
     def __init__(self):
         print('NordPool ', end='')
-        bd_DATA_DIR = DATA_DIR + 'bdn/'
-        if os.path.isfile(bd_DATA_DIR + 'af.pickle'):
+        bd_DATA_DIR = os.path.join(DATA_DIR, 'bdn')
+        pickle_file_name = os.path.join(bd_DATA_DIR, 'af.pickle')
+        if os.path.isfile(pickle_file_name):
             algus = datetime.now()
-            with open(bd_DATA_DIR + 'af.pickle', 'rb') as f:
+            with open(pickle_file_name, 'rb') as f:
                 # The protocol version used is detected automatically, so we do not
                 # have to specify it.
                 self.af = pickle.load(f)
@@ -424,7 +430,7 @@ class NordPoolData():
                 for entry in it:
                     if entry.name.startswith(
                             'nps-export') and entry.is_file():  # Loeme ainult Elektrilevi logifailid andmefreimidesse
-                        fail = bd_DATA_DIR + entry.name
+                        fail = os.path.join(bd_DATA_DIR, entry.name)
                         print('Loeme faili: ', fail)
                         ajf.append(pd.read_csv(fail, delimiter=';',
                                  decimal = ',')) # Murdosa eraldajaks on koma
@@ -441,7 +447,7 @@ class NordPoolData():
             self.af.columns = ['NordPool hind [s/kWh]']
 
             # Kirjutame andmed pickle faili
-            with open(bd_DATA_DIR + 'af.pickle', 'wb') as f:
+            with open(pickle_file_name, 'wb') as f:
                 # Pickle the 'data' dictionary using the highest protocol available.
                 pickle.dump(self.af, f, pickle.HIGHEST_PROTOCOL)
             aeg = datetime.now() - algus

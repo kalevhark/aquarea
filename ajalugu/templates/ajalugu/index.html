@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block extra_head %}
-  <link rel="stylesheet" href="{% static 'ajalugu/css/ajalugu-index.css' %}">
+  <link rel="stylesheet" href="{% static 'css/ajalugu-index.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -22,7 +22,7 @@
       <button id="kuu_edasi" type="button" class="changeMonth">
         <i class="fas fa-angle-double-right"></i>
       </button>
-      <image id="submitLoader" src="{% static 'ajalugu/img/ajax-loader.gif' %}"/>
+      <image id="submitLoader" src="{% static 'img/ajax-loader.gif' %}"/>
       <span id="container_periood_describe" class="w3-hide-medium w3-hide-small"></span>
     </form>
   </div>
@@ -32,7 +32,7 @@
       <div id="loader"></div>
 
       <div class="w3-center" id="loaderDiv4">
-        <img src={% static "ajalugu/img/ajax-loader-bar.gif" %} >
+        <img src="{% static 'img/ajax-loader-bar.gif' %}">
       </div>
       <div
           id="container_ajalugu_index_p2evakaupa_chart"
@@ -44,7 +44,7 @@
   <div class="w3-row">
     <div class="w3-half">
       <div class="w3-center" id="loaderDiv1">
-        <img src={% static "ajalugu/img/ajax-loader-bar.gif" %} >
+        <img src="{% static 'img/ajax-loader-bar.gif' %}" >
       </div>
       <div
       id="container_ajalugu_index_kuukaupa_chart"
@@ -54,7 +54,7 @@
     </div>
     <div class="w3-half">
       <div class="w3-center" id="loaderDiv5">
-	      <img src={% static "ajalugu/img/ajax-loader-bar.gif" %} >
+	      <img src="{% static 'img/ajax-loader-bar.gif' %}" >
 	    </div>
       <div
           id="container_ajalugu_index_cop_chart"
@@ -67,8 +67,5 @@
 {% endblock %}
 
 {% block javascript %}
-<script src="{% static 'ajalugu/js/ajalugu-index.js' %}"></script>
-
-<script>
-</script>
+<script src="{% static 'js/ajalugu-index.js' %}"></script>
 {% endblock %}
