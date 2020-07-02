@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     '192.168.1.143',
-    'deb9server.lan',
+    's9a.lan',
     'localhost',
 ]
 
