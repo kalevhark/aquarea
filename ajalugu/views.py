@@ -136,6 +136,7 @@ def container_ajalugu_index_p2evakaupa_chart(request):
     df_chart[cols[1]][df_chart[cols[1]].isna()] = 'null' # puuduvad väärtused -> null (HighChartsi jaoks)
     bdi_outdoor_temps = list(df_chart[cols[0]])
     bda_outdoor_temps = list(df_chart[cols[1]])
+    bda_zone1_temps = list(df_chart[cols[2]])
     bda_con_heat_kwhs = list(df_chart[cols[3]])
     bda_con_tank_kwhs = list(df_chart[cols[4]])
     df_chart[cols[6]][df_chart[cols[6]].isna()] = 0 # puuduvad väärtused -> 0
@@ -146,7 +147,6 @@ def container_ajalugu_index_p2evakaupa_chart(request):
     bde_con_total_EURs = list(df_chart[cols[8]])
     bda_con_total_EURs = list(df_chart[cols[9]])
     bda_COP_total = list(df_chart.apply(nulliga_jagamine, axis=1))
-
 
     # Graafiku andmeseeriate kirjeldamine
     series_bda_outdoor_temps = {
@@ -175,6 +175,20 @@ def container_ajalugu_index_p2evakaupa_chart(request):
         'yAxis': 2,
         'color': '#FF3333',
         'negativeColor': '#48AFE8',
+        'visible': False
+    }
+    series_bda_zone1_temps = {
+        'name': f'Keskmine küttevee temperatuur (Z1)',
+        'data': bda_zone1_temps,
+        'type': 'spline',
+        'zIndex': 2,
+        'tooltip': {
+            'valueDecimals': 1,
+            'valueSuffix': ' °C'
+        },
+        'yAxis': 2,
+        'color': '#DDDDDD',
+        # 'negativeColor': '#48AFE8',
         'visible': False
     }
     series_bde_con_total_EURs = {
@@ -330,6 +344,7 @@ def container_ajalugu_index_p2evakaupa_chart(request):
         'series': [
             series_bda_outdoor_temps,
             series_bdi_outdoor_temps,
+            series_bda_zone1_temps,
             # series_bda_gen_total_kwhs,
             series_bda_gen_delta_kwhs,
             series_bda_con_heat_kwhs,
