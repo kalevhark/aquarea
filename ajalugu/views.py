@@ -117,9 +117,9 @@ def container_ajalugu_index_p2evakaupa_chart(request):
     :return chart:
     """
     def nulliga_jagamine(x):
-        try:
+        if x[7] != 0:
             value = x[6]/x[7]
-        except:
+        else:
             value = 0
         return value
 
