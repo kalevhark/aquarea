@@ -605,7 +605,7 @@ class BigData():
         10. EE üldhind [s/kWh]
         11. EL üldhind [s/kWh]
         """
-        andmed_mean = self.af[[self.af.columns[i] for i in [8, 2]]].groupby(
+        andmed_mean = self.af[[self.af.columns[i] for i in [8, 2, 0]]].groupby(
             [self.af.index.get_level_values('Aasta'),
              self.af.index.get_level_values('Kuu'),
              self.af.index.get_level_values('Päev')

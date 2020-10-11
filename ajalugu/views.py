@@ -117,10 +117,10 @@ def container_ajalugu_index_p2evakaupa_chart(request):
     :return chart:
     """
     def nulliga_jagamine(x):
-        if (x[6] == 0) or (x[5] == 0):
+        try:
+            return x[6]/x[7]
+        except:
             return 0
-        else:
-            return x[5]/x[6]
 
     df = aquarea_app.cache((aquarea_app.start, aquarea_app.stopp))
     df_chart = df.p2evakaupa()
@@ -135,15 +135,15 @@ def container_ajalugu_index_p2evakaupa_chart(request):
     df_chart[cols[1]][df_chart[cols[1]].isna()] = 'null' # puuduvad väärtused -> null (HighChartsi jaoks)
     bdi_outdoor_temps = list(df_chart[cols[0]])
     bda_outdoor_temps = list(df_chart[cols[1]])
-    bda_con_heat_kwhs = list(df_chart[cols[2]])
-    bda_con_tank_kwhs = list(df_chart[cols[3]])
-    df_chart[cols[5]][df_chart[cols[5]].isna()] = 0 # puuduvad väärtused -> 0
-    df_chart[cols[6]][df_chart[cols[6]].isna()] = 0  # puuduvad väärtused -> 0
-    bda_gen_total_kwhs = list(df_chart[cols[5]])
-    bda_con_total_kwhs = list(df_chart[cols[6]])
-    bda_gen_delta_kwhs = list(df_chart[cols[5]] - df_chart[cols[6]])
-    bde_con_total_EURs = list(df_chart[cols[7]])
-    bda_con_total_EURs = list(df_chart[cols[8]])
+    bda_con_heat_kwhs = list(df_chart[cols[3]])
+    bda_con_tank_kwhs = list(df_chart[cols[4]])
+    df_chart[cols[6]][df_chart[cols[6]].isna()] = 0 # puuduvad väärtused -> 0
+    df_chart[cols[7]][df_chart[cols[7]].isna()] = 0 # puuduvad väärtused -> 0
+    bda_gen_total_kwhs = list(df_chart[cols[6]])
+    bda_con_total_kwhs = list(df_chart[cols[7]])
+    bda_gen_delta_kwhs = list(df_chart[cols[6]] - df_chart[cols[6]])
+    bde_con_total_EURs = list(df_chart[cols[8]])
+    bda_con_total_EURs = list(df_chart[cols[9]])
     bda_COP_total = list(df_chart.apply(nulliga_jagamine, axis=1))
 
 
