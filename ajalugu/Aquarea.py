@@ -202,7 +202,7 @@ class AquareaData():
             andmed.index.hour
         ]
         # cols = [self.v(i) for i in (12, 13, 14, 28, 30, 29, 31)]
-        cols = [self.v(i) for i in (32, 34, 35, 66, 70, 67, 71)]
+        cols = [self.v(i) for i in (31, 33, 34, 65, 69, 66, 70)]
         return andmed.groupby(levels).mean()[cols]
 
 
