@@ -118,9 +118,10 @@ def container_ajalugu_index_p2evakaupa_chart(request):
     """
     def nulliga_jagamine(x):
         try:
-            return x[6]/x[7]
+            value = x[6]/x[7]
         except:
-            return 0
+            value = 0
+        return value
 
     df = aquarea_app.cache((aquarea_app.start, aquarea_app.stopp))
     df_chart = df.p2evakaupa()
