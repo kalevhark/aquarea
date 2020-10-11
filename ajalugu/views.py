@@ -142,7 +142,7 @@ def container_ajalugu_index_p2evakaupa_chart(request):
     df_chart[cols[7]][df_chart[cols[7]].isna()] = 0 # puuduvad väärtused -> 0
     bda_gen_total_kwhs = list(df_chart[cols[6]])
     bda_con_total_kwhs = list(df_chart[cols[7]])
-    bda_gen_delta_kwhs = list(df_chart[cols[6]] - df_chart[cols[6]])
+    bda_gen_delta_kwhs = list(df_chart[cols[7]] - df_chart[cols[6]])
     bde_con_total_EURs = list(df_chart[cols[8]])
     bda_con_total_EURs = list(df_chart[cols[9]])
     bda_COP_total = list(df_chart.apply(nulliga_jagamine, axis=1))
