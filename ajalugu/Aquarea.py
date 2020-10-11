@@ -535,6 +535,7 @@ class BigData():
         df["EL üldhind [s/kWh]"] = df.index.to_series().apply(
             y.ELhind)  # Leiame iga tunni võrgutasu hinna üldhinna tabelist
         cols = df.columns # veergude lihtsamaks kasutamiseks
+        print(cols)
         df['Aquarea kulu [kWh]'] = (df[cols[3]] + df[cols[4]])
         df['Aquarea tulu [kWh]'] = (df[cols[5]] + df[cols[6]])
         df['Aquarea kulu [€]'] = (df[cols[3]] + df[cols[4]]) * (df[cols[10]] + df[cols[11]])/100
