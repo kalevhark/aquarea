@@ -137,8 +137,15 @@ class AquareaData():
                     if entry.name.startswith('Statistics_B197792584') and entry.is_file(): # Loeme ainult Aquarea logifailid andmefreimidesse
                         fail = os.path.join(bd_DATA_DIR, entry.name)
                         print('Loeme faili: ', fail)
-                        ajf.append(pd.read_csv(fail, delimiter=',', decimal='.', parse_dates=[0],
-                                 usecols=[0,1,3,8,9,12,13,17,19,20,21,22,25,32,34,35,36,37,38,40,42,45,47,49,50,51,57,58,59,66,67,70,71],))
+                        ajf.append(
+                            pd.read_csv(
+                                fail,
+                                delimiter=',',
+                                decimal='.',
+                                parse_dates=[0],
+                                # usecols=[0,1,3,8,9,12,13,17,19,20,21,22,25,32,34,35,36,37,38,40,42,45,47,49,50,51,57,58,59,66,67,70,71],
+                            )
+                        )
 
             print('Liidame andmed ja kõrvaldame duplikaadid...')
             self.af = pd.concat(ajf[:], axis=0).drop_duplicates() # Ühendame andmefreimid ja kõrvaldame duplikaadid
@@ -194,7 +201,8 @@ class AquareaData():
             andmed.index.day,
             andmed.index.hour
         ]
-        cols = [self.v(i) for i in (12, 13, 14, 28, 30, 29, 31)]
+        # cols = [self.v(i) for i in (12, 13, 14, 28, 30, 29, 31)]
+        cols = [self.v(i) for i in (32, 34, 35, 66, 70, 67, 71)]
         return andmed.groupby(levels).mean()[cols]
 
 
