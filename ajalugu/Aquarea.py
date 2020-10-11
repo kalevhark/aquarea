@@ -206,19 +206,21 @@ class AquareaData():
             self.v(i)
             for i
             in (
-                35, # Inlet water temperature[°C]
+                # 35, # Inlet water temperature[°C]
+                31, # Zone1: Actual (water outlet/room/pool) temperature [°C]
                 33, # Actual tank temperature [°C]
                 34, # Actual outdoor temperature [°C]
                 65, # Heat mode energy consumption [kW]
                 69, # Tank mode energy consumption [kW]
                 66, # Heat mode energy generation [kW]
                 70, # Tank mode energy generation [kW]
-                31, # Zone1: Actual (water outlet/room/pool) temperature [°C]
-                32, # Zone2: Actual (water outlet/room/pool) temperature [°C]
-
+                # 31, # Zone1: Actual (water outlet/room/pool) temperature [°C]
+                # 32, # Zone2: Actual (water outlet/room/pool) temperature [°C]
             )
         ]
-        return andmed.groupby(levels).mean()[cols]
+        data = andmed.groupby(levels).mean()[cols]
+        print(data.columns)
+        return data
 
 
     def cop(self, **kwargs):
