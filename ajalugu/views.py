@@ -117,10 +117,10 @@ def container_ajalugu_index_p2evakaupa_chart(request):
     :return chart:
     """
     def nulliga_jagamine(x):
-        if x[7] != 0:
-            value = x[6]/x[7]
-        else:
+        if x[6] == 0 or x[7] == 0:
             value = 0
+        else:
+            value = x[6]/x[7]
         return value
 
     df = aquarea_app.cache((aquarea_app.start, aquarea_app.stopp))
