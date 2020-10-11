@@ -202,7 +202,22 @@ class AquareaData():
             andmed.index.hour
         ]
         # cols = [self.v(i) for i in (12, 13, 14, 28, 30, 29, 31)]
-        cols = [self.v(i) for i in (31, 33, 34, 65, 69, 66, 70)]
+        cols = [
+            self.v(i)
+            for i
+            in (
+                35, # Inlet water temperature[°C]
+                33, # Actual tank temperature [°C]
+                34, # Actual outdoor temperature [°C]
+                65, # Heat mode energy consumption [kW]
+                69, # Tank mode energy consumption [kW]
+                66, # Heat mode energy generation [kW]
+                70, # Tank mode energy generation [kW]
+                31, # Zone1: Actual (water outlet/room/pool) temperature [°C]
+                32, # Zone2: Actual (water outlet/room/pool) temperature [°C]
+
+            )
+        ]
         return andmed.groupby(levels).mean()[cols]
 
 
