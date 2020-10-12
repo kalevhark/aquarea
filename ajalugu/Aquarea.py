@@ -58,7 +58,6 @@ class EEYldHindData():
         return tekst
     
     def __str__(self):
-        
         algus_aasta = self.af['Aasta'].min()
         algus_kuu = self.af['Kuu'][self.af['Aasta'] == algus_aasta].min()
         l6pp_aasta = self.af['Aasta'].max()
@@ -208,14 +207,13 @@ class AquareaData():
             in (
                 # 35, # Inlet water temperature[°C]
                 31, # Zone1: Actual (water outlet/room/pool) temperature [°C]
+                32, # Zone2: Actual (water outlet/room/pool) temperature [°C]
                 33, # Actual tank temperature [°C]
                 34, # Actual outdoor temperature [°C]
                 65, # Heat mode energy consumption [kW]
                 69, # Tank mode energy consumption [kW]
                 66, # Heat mode energy generation [kW]
                 70, # Tank mode energy generation [kW]
-                # 31, # Zone1: Actual (water outlet/room/pool) temperature [°C]
-                # 32, # Zone2: Actual (water outlet/room/pool) temperature [°C]
             )
         ]
         data = andmed.groupby(levels).mean()[cols]
@@ -534,7 +532,11 @@ class BigData():
         df["EL üldhind [s/kWh]"] = df.index.to_series().apply(
             y.ELhind)  # Leiame iga tunni võrgutasu hinna üldhinna tabelist
         cols = df.columns # veergude lihtsamaks kasutamiseks
-        print(cols)
+
+        print('Aquarea.Bigdata:')
+        for col in cols:
+            print(col)
+
         df['Aquarea kulu [kWh]'] = (df[cols[3]] + df[cols[4]])
         df['Aquarea tulu [kWh]'] = (df[cols[5]] + df[cols[6]])
         df['Aquarea kulu [€]'] = (df[cols[3]] + df[cols[4]]) * (df[cols[10]] + df[cols[11]])/100
