@@ -526,7 +526,7 @@ class NordPoolData():
 class BigData():
     """Suur tabel graafikute tarbeks"""
     def __init__(self, a, i, e, n, y):
-        df = pd.concat([a, e, i, n], axis=1).dropna()  # Liidame andmed üheks tabeliks
+        df = pd.concat([a, e, i, n], axis=1)  # Liidame andmed üheks tabeliks
         df["EE üldhind [s/kWh]"] = df.index.to_series().apply(
             y.EEhind)  # Leiame iga tunni elektrienergia hinna üldhinna tabelist
         df["EL üldhind [s/kWh]"] = df.index.to_series().apply(

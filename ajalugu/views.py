@@ -137,6 +137,8 @@ def container_ajalugu_index_p2evakaupa_chart(request):
 
     categories = list(df_chart.index.to_series())
     df_chart[cols[1]][df_chart[cols[1]].isna()] = 'null' # puuduvad väärtused -> null (HighChartsi jaoks)
+    df_chart[cols[2]][df_chart[cols[2]].isna()] = 'null'  # puuduvad väärtused -> null (HighChartsi jaoks)
+    df_chart[cols[3]][df_chart[cols[3]].isna()] = 'null'  # puuduvad väärtused -> null (HighChartsi jaoks)
     bdi_outdoor_temps = list(df_chart[cols[0]])
     bda_outdoor_temps = list(df_chart[cols[1]])
     bda_zone1_temps = list(df_chart[cols[2]])
