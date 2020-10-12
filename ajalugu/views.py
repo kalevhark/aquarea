@@ -140,16 +140,16 @@ def container_ajalugu_index_p2evakaupa_chart(request):
     bdi_outdoor_temps = list(df_chart[cols[0]])
     bda_outdoor_temps = list(df_chart[cols[1]])
     bda_zone1_temps = list(df_chart[cols[2]])
-    # bda_zone2_temps = list(df_chart[cols[2]])
-    bda_con_heat_kwhs = list(df_chart[cols[3]])
-    bda_con_tank_kwhs = list(df_chart[cols[4]])
-    df_chart[cols[6]][df_chart[cols[6]].isna()] = 0 # puuduvad väärtused -> 0
+    bda_zone2_temps = list(df_chart[cols[3]])
+    bda_con_heat_kwhs = list(df_chart[cols[4]])
+    bda_con_tank_kwhs = list(df_chart[cols[5]])
     df_chart[cols[7]][df_chart[cols[7]].isna()] = 0 # puuduvad väärtused -> 0
-    bda_gen_total_kwhs = list(df_chart[cols[6]])
-    bda_con_total_kwhs = list(df_chart[cols[7]])
-    bda_gen_delta_kwhs = list(df_chart[cols[6]] - df_chart[cols[7]])
-    bde_con_total_EURs = list(df_chart[cols[8]])
-    bda_con_total_EURs = list(df_chart[cols[9]])
+    df_chart[cols[8]][df_chart[cols[8]].isna()] = 0 # puuduvad väärtused -> 0
+    bda_gen_total_kwhs = list(df_chart[cols[7]])
+    bda_con_total_kwhs = list(df_chart[cols[8]])
+    bda_gen_delta_kwhs = list(df_chart[cols[7]] - df_chart[cols[8]])
+    bde_con_total_EURs = list(df_chart[cols[9]])
+    bda_con_total_EURs = list(df_chart[cols[10]])
     bda_COP_total = list(df_chart.apply(nulliga_jagamine, axis=1))
 
     # Graafiku andmeseeriate kirjeldamine
