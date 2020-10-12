@@ -219,7 +219,6 @@ class AquareaData():
             )
         ]
         data = andmed.groupby(levels).mean()[cols]
-        print(data.columns)
         return data
 
 

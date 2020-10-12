@@ -131,7 +131,8 @@ def container_ajalugu_index_p2evakaupa_chart(request):
         return JsonResponse(chart)
 
     cols = df_chart.columns
-    print(cols)
+    for col in cols:
+        print(col)
     categories = list(df_chart.index.to_series())
     df_chart[cols[1]][df_chart[cols[1]].isna()] = 'null' # puuduvad väärtused -> null (HighChartsi jaoks)
     bdi_outdoor_temps = list(df_chart[cols[0]])
