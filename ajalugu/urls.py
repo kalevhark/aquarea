@@ -15,6 +15,11 @@ urlpatterns = [
         name='index'
     ),
     path(
+        'container_ajalugu_index_p2evakaupa/',
+        views.container_ajalugu_index_p2evakaupa,
+        name='container_ajalugu_index_p2evakaupa'
+    ),
+    path(
         'container_ajalugu_index_p2evakaupa_chart/',
         views.container_ajalugu_index_p2evakaupa_chart,
         name='container_ajalugu_index_p2evakaupa_chart'
