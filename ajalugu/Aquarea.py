@@ -534,13 +534,15 @@ class BigData():
         cols = df.columns # veergude lihtsamaks kasutamiseks
 
         print('Aquarea.Bigdata:')
+        n = 0
         for col in cols:
-            print(col)
+            print(n, col)
+            n += 1
 
-        df['Aquarea kulu [kWh]'] = (df[cols[3]] + df[cols[4]])
-        df['Aquarea tulu [kWh]'] = (df[cols[5]] + df[cols[6]])
-        df['Aquarea kulu [€]'] = (df[cols[3]] + df[cols[4]]) * (df[cols[10]] + df[cols[11]])/100
-        df['Elektri kulu [€]'] = (df[cols[7]]) * (df[cols[10]] + df[cols[11]])/100
+        df['Aquarea kulu [kWh]'] = (df[cols[4]] + df[cols[5]])
+        df['Aquarea tulu [kWh]'] = (df[cols[6]] + df[cols[7]])
+        df['Aquarea kulu [€]'] = (df[cols[4]] + df[cols[5]]) * (df[cols[11]] + df[cols[12]])/100
+        df['Elektri kulu [€]'] = (df[cols[8]]) * (df[cols[11]] + df[cols[12]])/100
         df = df.rename_axis(['Aasta', 'Kuu', 'Päev', 'Tund'])
         self.af = df
 

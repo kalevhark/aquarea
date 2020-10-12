@@ -117,10 +117,10 @@ def container_ajalugu_index_p2evakaupa_chart(request):
     :return chart:
     """
     def nulliga_jagamine(x):
-        if x[6] == 0 or x[7] == 0:
+        if x[7] == 0 or x[8] == 0:
             value = 0
         else:
-            value = x[6]/x[7]
+            value = x[7]/x[8]
         return value
 
     df = aquarea_app.cache((aquarea_app.start, aquarea_app.stopp))
@@ -140,6 +140,7 @@ def container_ajalugu_index_p2evakaupa_chart(request):
     bdi_outdoor_temps = list(df_chart[cols[0]])
     bda_outdoor_temps = list(df_chart[cols[1]])
     bda_zone1_temps = list(df_chart[cols[2]])
+    # bda_zone2_temps = list(df_chart[cols[2]])
     bda_con_heat_kwhs = list(df_chart[cols[3]])
     bda_con_tank_kwhs = list(df_chart[cols[4]])
     df_chart[cols[6]][df_chart[cols[6]].isna()] = 0 # puuduvad väärtused -> 0
