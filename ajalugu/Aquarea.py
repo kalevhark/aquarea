@@ -590,6 +590,7 @@ class BigData():
         Koostab koondtabeli päevade kaupa
         :return:
         +
+        00. Zone1: Actual (water outlet/room/pool) temperature [°C]
         02. Actual outdoor temperature [°C]
         07. Elektrienergia kulu [kWh]
         08. Ametlik mõõdetud temperatuur [°C]
@@ -600,7 +601,7 @@ class BigData():
         14. Aquarea kulu [senti]
         15. Elektri kulu [senti]
         -
-        00. Zone1: Actual (water outlet/room/pool) temperature [°C]
+
         01. Actual tank temperature [°C]
         05. Heat mode energy generation [kW]
         06. Tank mode energy generation [kW]
@@ -608,6 +609,12 @@ class BigData():
         10. EE üldhind [s/kWh]
         11. EL üldhind [s/kWh]
         """
+
+        print('Aquarea.p2evakaupa:')
+        n = 0
+        for col in self.af.columns:
+            print(n, col)
+
         andmed_mean = self.af[[self.af.columns[i] for i in [8, 2, 0]]].groupby(
             [self.af.index.get_level_values('Aasta'),
              self.af.index.get_level_values('Kuu'),
