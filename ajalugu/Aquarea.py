@@ -589,39 +589,39 @@ class BigData():
         """
         Koostab koondtabeli päevade kaupa
         :return:
-        +
-        00. Zone1: Actual (water outlet/room/pool) temperature [°C]
-        02. Actual outdoor temperature [°C]
-        07. Elektrienergia kulu [kWh]
-        08. Ametlik mõõdetud temperatuur [°C]
-        03. Heat mode energy consumption [kW]
-        04. Tank mode energy consumption [kW]
-        12. Aquarea kulu [kWh]
-        13. Aquarea tulu [kWh]
-        14. Aquarea kulu [senti]
-        15. Elektri kulu [senti]
-        -
 
-        01. Actual tank temperature [°C]
-        05. Heat mode energy generation [kW]
-        06. Tank mode energy generation [kW]
-        09. NordPool hind [s/kWh]
-        10. EE üldhind [s/kWh]
-        11. EL üldhind [s/kWh]
+        00 Zone1: Actual (water outlet/room/pool) temperature [°C]
+        01 Zone2: Actual (water outlet/room/pool) temperature [°C]
+        02 Actual tank temperature [°C]
+        03 Actual outdoor temperature [°C]
+        04 Heat mode energy consumption [kW]
+        05 Tank mode energy consumption [kW]
+        06 Heat mode energy generation [kW]
+        07 Tank mode energy generation [kW]
+        08 Elektrienergia kulu [kWh]
+        09 Ametlik mõõdetud temperatuur [°C]
+        10 NordPool hind [s/kWh]
+        11 EE üldhind [s/kWh]
+        12 EL üldhind [s/kWh]
+        13 Aquarea kulu [kWh]
+        14 Aquarea tulu [kWh]
+        15 Aquarea kulu [€]
+        16 Elektri kulu [€]
         """
 
         print('Aquarea.p2evakaupa:')
         n = 0
         for col in self.af.columns:
             print(n, col)
+            n += 1
 
-        andmed_mean = self.af[[self.af.columns[i] for i in [8, 2, 0]]].groupby(
+        andmed_mean = self.af[[self.af.columns[i] for i in [9, 3, 0, 1]]].groupby(
             [self.af.index.get_level_values('Aasta'),
              self.af.index.get_level_values('Kuu'),
              self.af.index.get_level_values('Päev')
              ]
         ).mean()
-        andmed_sum = self.af[[self.af.columns[i] for i in [3, 4, 7, 13, 12, 15, 14]]].groupby(
+        andmed_sum = self.af[[self.af.columns[i] for i in [4, 5, 8, 14, 13, 16, 15]]].groupby(
             [self.af.index.get_level_values('Aasta'),
              self.af.index.get_level_values('Kuu'),
              self.af.index.get_level_values('Päev')
