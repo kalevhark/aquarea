@@ -284,12 +284,26 @@ class ElektrileviData():
                     if entry.name.startswith(
                             'Elektrilevi_S9a') and entry.is_file():  # Loeme ainult Elektrilevi logifailid andmefreimidesse
                         fail = os.path.join(bd_DATA_DIR, entry.name)
+                        skiprows = 6
+                        decimal = ','
+                        # 2021.03 muudeti failiformaati
+                        faili_moodustamise_aeg = fail.split('.')[0][-6:]
+                        faili_moodustamise_aeg_aasta = int(faili_moodustamise_aeg[:4])
+                        faili_moodustamise_aeg_kuu = int(faili_moodustamise_aeg[-2:])
+                        if datetime(faili_moodustamise_aeg_aasta, faili_moodustamise_aeg_kuu, 1) > datetime(2021, 2, 28):
+                            skiprows = 4
+                            decimal = '.'
                         print('Loeme faili: ', fail)
-                        ajf.append(pd.read_csv(fail, delimiter=';',
-                                 skiprows=6, header=None, names = ['Timestamp','Elektrienergia kulu [kWh]'], # Jätame ära algusread ja nimetame ise veerud
-                                 parse_dates=[0], dayfirst = True, # Konverteerime 1. veeru Euroopa kuupäevatüüpi
-                                 decimal = ',', # Murdosa eraldajaks on koma
-                                 usecols=[0,2]).dropna(how='any')) # Loeme ainult täielike andmetega veerud Algusaeg, Lõppaeg ja Kogus
+                        data = pd.read_csv(
+                            fail,
+                            delimiter=';',
+                            skiprows=skiprows,
+                            header=None, names = ['Timestamp','Elektrienergia kulu [kWh]'], # Jätame ära algusread ja nimetame ise veerud
+                            parse_dates=[0], dayfirst = True, # Konverteerime 1. veeru Euroopa kuupäevatüüpi
+                            decimal = decimal, # Murdosa eraldajaks on koma
+                            usecols=[0,2]
+                        ).dropna(how='any') # Loeme ainult täielike andmetega veerud Algusaeg, Lõppaeg ja Kogus
+                        ajf.append(data)
             self.af = pd.concat(ajf[:], axis=0).drop_duplicates() # Ühendame andmefreimid ja kõrvaldame duplikaadid
             self.af = self.af.set_index('Timestamp')
 
