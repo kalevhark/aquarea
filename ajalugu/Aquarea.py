@@ -293,7 +293,7 @@ class ElektrileviData():
                         faili_moodustamise_aeg_kuu = int(faili_moodustamise_aeg[-2:])
                         if datetime(faili_moodustamise_aeg_aasta, faili_moodustamise_aeg_kuu, 1) > datetime(2021, 2, 28):
                             skiprows = 4
-                            decimal = '.'
+                            # decimal = '.'
                         print('Loeme faili: ', fail)
                         data = pd.read_csv(
                             fail,
