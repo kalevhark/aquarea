@@ -11,6 +11,7 @@ try:
     DATA_DIR = os.path.join(settings.STATIC_ROOT, 'data')
 except:
     DATA_DIR = os.path.join(os.getcwd(), 'static/data/')
+print(DATA_DIR)
 
 def listdir_fullpath(d):
     return [os.path.join(d, f) for f in os.listdir(d)]
