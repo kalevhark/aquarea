@@ -834,7 +834,7 @@ Aquarea logifaili veerud:
 
 if __name__ == "__main__":
 
-    DATA_DIR = 'static/ajalugu/data/'
+    # DATA_DIR = 'static/ajalugu/data/'
     
     print('Arvutame...')
     bdy = EEYldHindData()
