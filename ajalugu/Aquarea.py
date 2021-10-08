@@ -10,7 +10,8 @@ from django.conf import settings
 try:
     DATA_DIR = os.path.join(settings.STATIC_ROOT, 'data')
 except:
-    DATA_DIR = os.path.join(os.getcwd(), 'static/data/')
+    from pathlib import Path
+    DATA_DIR = Path(__file__).resolve().parent.parent / 'static' / 'data'
 print(DATA_DIR)
 
 def listdir_fullpath(d):
@@ -833,7 +834,8 @@ Aquarea logifaili veerud:
 '''
 
 if __name__ == "__main__":
-
+    from pathlib import Path
+    DATA_DIR = Path(__file__).resolve().parent.parent / 'static' / 'data'
     # DATA_DIR = 'static/ajalugu/data/'
     
     print('Arvutame...')
