@@ -1,0 +1,85 @@
+{% extends 'ajalugu/base.html' %}
+
+{% load static %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/ajalugu-index.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="w3-row">
+    <!--  Perioodi valiku vorm-->
+    <form id="frm" action="{% url 'ajalugu:elektrienergia' %}" method="post">
+      <button id="kuu_tagasi" type="button" class="changeMonth">
+        <i class="fas fa-angle-double-left"></i>
+      </button>
+      {% csrf_token %}
+      {{ form.start_date }}
+      {{ form.stopp_date }}
+      <button id="submit" type="submit">
+        <i class="fas fa-search"></i>
+      </button>
+      <button id="kuu_edasi" type="button" class="changeMonth">
+        <i class="fas fa-angle-double-right"></i>
+      </button>
+      <image id="submitLoader" src="{% static 'img/ajax-loader.gif' %}"/>
+      <span id="container_periood_describe" class="w3-hide-medium w3-hide-small"></span>
+    </form>
+  </div>
+
+  <span id="container_periood_describe_small" class="w3-hide-large"></span>
+
+  <!-- Esimene graafikute rida -->
+  <div class="w3-row">
+    <div class="w3-half">
+      <div class="w3-center" id="loaderDiv1">
+        <img src="{% static 'img/ajax-loader-bar.gif' %}" >
+      </div>
+      <div
+              id="container_elektrilevi_n2dalakaupa_chart"
+              data-url="{% url 'ajalugu:container_elektrilevi_n2dalakaupa_chart' %}"
+              style="min-width: 400px; height: 400px; margin: 0 auto">
+      </div>
+    </div>
+
+    <div class="w3-half">
+      <div class="w3-center" id="loaderDiv2">
+	      <img src="{% static 'img/ajax-loader-bar.gif' %}" >
+	    </div>
+      <div
+              id="container_nordpool_n2dalakaupa_chart"
+              data-url="{% url 'ajalugu:container_nordpool_n2dalakaupa_chart' %}"
+              style="min-width: 400px; height: 400px; margin: 0 auto">
+      </div>
+    </div>
+  </div>
+
+  <!-- Teine graafikute rida -->
+  <div class="w3-row">
+    <div class="w3-half">
+      <div class="w3-center" id="loaderDiv3">
+        <img src="{% static 'img/ajax-loader-bar.gif' %}" >
+      </div>
+      <div
+              id="container_elektrilevi_n2dalakaupa_chart3d"
+{#              data-url="{% url 'ajalugu:container_elektrilevi_3dn2dalakaupa_chart' %}"#}
+              style="min-width: 400px; height: 400px; margin: 0 auto">
+      </div>
+    </div>
+
+    <div class="w3-half">
+      <div class="w3-center" id="loaderDiv4">
+	      <img src="{% static 'img/ajax-loader-bar.gif' %}" >
+	    </div>
+      <div
+              id="container_nordpool_n2dalakaupa_chart3d"
+{#              data-url="{% url 'ajalugu:container_nordpool_n2dalakaupa_3dchart' %}"#}
+              style="min-width: 400px; height: 400px; margin: 0 auto">
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block javascript %}
+<script src="{% static 'js/elektrienergia.js' %}"></script>
+{% endblock %}

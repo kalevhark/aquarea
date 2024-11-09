@@ -1,0 +1,13 @@
+{% include "django/forms/widgets/input.html" %}
+
+<script>
+  $(function () {
+    $("input[name='{{ widget.name }}']").datepicker({
+      format: 'dd.mm.yyyy',
+      autoHide: true,
+<!--      startDate: {{ widget.attrs.start }},-->
+      endDate: Date.now(),
+      weekStart: 1,
+    });
+  });
+</script>

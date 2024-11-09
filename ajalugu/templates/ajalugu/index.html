@@ -1,0 +1,88 @@
+{% extends 'ajalugu/base.html' %}
+
+{% load static %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/ajalugu-index.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="w3-row">
+    <!--  Perioodi valiku vorm-->
+    <form id="frm" action="{% url 'ajalugu:index' %}" method="post">
+      <button id="kuu_tagasi" type="button" class="changeMonth">
+        <i class="fas fa-angle-double-left"></i>
+      </button>
+      {% csrf_token %}
+      {{ form.start_date }}
+      {{ form.stopp_date }}
+      <button id="submit" type="submit">
+        <i class="fas fa-search"></i>
+      </button>
+      <button id="kuu_edasi" type="button" class="changeMonth">
+        <i class="fas fa-angle-double-right"></i>
+      </button>
+      <image id="submitLoader" src="{% static 'img/ajax-loader.gif' %}"/>
+      <span id="container_periood_describe" class="w3-hide-medium w3-hide-small"></span>
+    </form>
+  </div>
+
+  <span id="container_periood_describe_small" class="w3-hide-large"></span>
+
+  <div class="w3-row">
+    <div class="w3-container">
+      <div id="loader"></div>
+
+      <div class="w3-center" id="loaderDiv4">
+        <img src="{% static 'img/ajax-loader-bar.gif' %}">
+      </div>
+      <div
+          id="container_ajalugu_index_p2evakaupa_chart"
+          data-url="{% url 'ajalugu:container_ajalugu_index_p2evakaupa_chart' %}"
+          style="min-width: 400px; height: 400px; margin: 0 auto">
+      </div>
+    </div>
+  </div>
+
+  <div class="w3-row">
+    <div class="w3-half">
+      <div class="w3-center" id="loaderDiv1">
+        <img src="{% static 'img/ajax-loader-bar.gif' %}" >
+      </div>
+      <div
+      id="container_ajalugu_index_kuukaupa_chart"
+      data-url="{% url 'ajalugu:container_ajalugu_index_kuukaupa_chart' %}"
+      style="min-width: 400px; height: 400px; margin: 0 auto">
+      </div>
+    </div>
+    <div class="w3-half">
+      <div class="w3-center" id="loaderDiv5">
+	      <img src="{% static 'img/ajax-loader-bar.gif' %}" >
+	    </div>
+      <div
+          id="container_ajalugu_index_cop_chart"
+          data-url="{% url 'ajalugu:container_ajalugu_index_cop_chart' %}"
+          style="min-width: 400px; height: 400px; margin: 0 auto">
+      </div>
+    </div>
+  </div>
+
+  <div class="w3-row">
+    <div class="w3-container">
+{#      <div id="loader"></div>#}
+{##}
+{#      <div class="w3-center" id="loaderDiv4">#}
+{#        <img src="{% static 'img/ajax-loader-bar.gif' %}">#}
+{#      </div>#}
+      <div
+          id="container_ajalugu_index_kuukaupa"
+          data-url="{% url 'ajalugu:container_ajalugu_index_kuukaupa' %}"
+          style="min-width: 800px; height: 400px; margin: 0 auto">
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block javascript %}
+<script src="{% static 'js/ajalugu-index.js' %}"></script>
+{% endblock %}
