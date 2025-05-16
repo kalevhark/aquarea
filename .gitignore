@@ -1,2 +1,8 @@
 /static
 __pycache__/
+/db.sqlite3
+/cop_temp_-7.xlsx
+/cop_temp_0.xlsx
+/cop_temp_7.xlsx
+/app/utils/dev_conf.py
+/aquarea/settings.ini

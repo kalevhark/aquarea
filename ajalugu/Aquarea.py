@@ -31,7 +31,7 @@ def soodus(aeg):
         riigipyhad = [
             (aasta, 1, 1),
             (aasta, 2, 24),
-            (2022, 4, 15), (2023, 4, 7), (2024, 3, 29), # Suur reede
+            (2022, 4, 15), (2023, 4, 7), (2024, 3, 29), (2025, 4, 18), # Suur reede
             (2022, 4, 17), (2023, 4, 9), (2024, 3, 31), # Ülestõusmispühade 1. püha P
             (aasta, 5, 1),
             (2022, 6, 5), (2023, 5, 28), (2024, 5, 19), # Nelipühade 1. püha P
@@ -167,14 +167,20 @@ class AquareaData():
 
             cols = [
                 'Timestamp',
+                'Operation [1:Off, 2:On]',
+                'Inlet water temperature [°C]',
+                'Outlet water temperature [°C]',
                 'Zone1: Actual (water outlet/room/pool) temperature [°C]',
+                'Zone1: Water temperature (Target) [°C]',
                 'Zone2: Actual (water outlet/room/pool) temperature [°C]',
+                'Zone2: Water temperature (Target) [°C]',
                 'Actual tank temperature [°C]',
+                'Tank water set temperature [°C]',
                 'Actual outdoor temperature [°C]',
                 'Heat mode energy consumption [kW]',
                 'Tank mode energy consumption [kW]',
                 'Heat mode energy generation [kW]',
-                'Tank mode energy generation [kW]'
+                'Tank mode energy generation [kW]',
             ]
 
             dtype = {
@@ -190,7 +196,7 @@ class AquareaData():
                 'Zone1: (water shift/water/room) set temperature for cool mode [°C]': np.float16,
                 'Zone2: (water shift/water/room/pool) set temperature for heat mode [°C]': np.float16,
                 'Zone2: (water shift/water/room) set temperature for cool  mode [°C]': np.float16,
-                'Tank water set temperature [°C]': np.float16,
+                'Tank water set temperature [°C]': np.uint8,
                 'Co-efficient frequency control [%]': np.float16,
                 'Current Lv [Lv]': np.float16,
                 'External SW [1:Close, 2:Open]': np.uint8,
@@ -256,6 +262,7 @@ class AquareaData():
             with os.scandir(bd_DATA_DIR) as it:
                 for entry in it:
                     # print(entry)
+                    # 25.03.2024 muudeti failiformaati
                     if entry.name.startswith('Statistics_B197792584') and entry.is_file(): # Loeme ainult Aquarea logifailid andmefreimidesse
                         fail = os.path.join(bd_DATA_DIR, entry.name)
                         print('Loeme faili: ', fail)
@@ -269,6 +276,7 @@ class AquareaData():
                         )
                         # print(df.memory_usage(index=True, deep=False))
                         # break
+                        df = df.set_index('Timestamp')
                         ajf.append(df)
 
             print('Liidame andmed ja kõrvaldame duplikaadid...')
@@ -277,14 +285,14 @@ class AquareaData():
                     self.af = ajf[n]
                 else:
                     self.af = pd.concat([self.af, ajf[n]], axis=0)
-            # self.af = pd.concat(ajf[:], axis=0).drop_duplicates() # Ühendame andmefreimid ja kõrvaldame duplikaadid
-            self.af = self.af.drop_duplicates()  # Ühendame andmefreimid ja kõrvaldame duplikaadid
-            self.af = self.af.set_index('Timestamp')
+            # self.af = self.af.drop_duplicates()  # Ühendame andmefreimid ja kõrvaldame duplikaadid
+            self.af = self.af[self.af.index.duplicated(keep='first')==False]  # Ühendame andmefreimid ja kõrvaldame duplikaadid
+            # self.af = self.af.set_index('Timestamp')
 
             # Kirjutame andmed pickle faili
             with open(pickle_file_name, 'wb') as f:
                 # Pickle the 'data' dictionary using the highest protocol available.
-                pickle.dump(self.af, f, pickle.HIGHEST_PROTOCOL)
+                pickle.dump(self.af, f, pickle.DEFAULT_PROTOCOL)
 
         aeg = datetime.now() - algus
         print(f'{src}: {aeg.seconds}.{aeg.microseconds:06d}s')
@@ -332,22 +340,7 @@ class AquareaData():
             andmed.index.day,
             andmed.index.hour
         ]
-        # cols = [self.v(i) for i in (12, 13, 14, 28, 30, 29, 31)]
-        # cols = [
-        #     self.v(i)
-        #     for i
-        #     in (
-        #         # 35, # Inlet water temperature[°C]
-        #         31, # Zone1: Actual (water outlet/room/pool) temperature [°C]
-        #         32, # Zone2: Actual (water outlet/room/pool) temperature [°C]
-        #         33, # Actual tank temperature [°C]
-        #         34, # Actual outdoor temperature [°C]
-        #         65, # Heat mode energy consumption [kW]
-        #         69, # Tank mode energy consumption [kW]
-        #         66, # Heat mode energy generation [kW]
-        #         70, # Tank mode energy generation [kW]
-        #     )
-        # ]
+
         cols = [
             'Zone1: Actual (water outlet/room/pool) temperature [°C]',
             'Zone2: Actual (water outlet/room/pool) temperature [°C]',
@@ -384,24 +377,27 @@ class AquareaData():
                 self.stopp = kwargs['stopp'] + timedelta(days=1) # .replace(minute=0, second=0, microsecond=0)
 
         # Valime ainult soovitud kuupäevavahemiku
-        df = self.p2evaandmed(start=self.start, stopp=self.stopp)
+        df = self.tunniandmed(start=self.start, stopp=self.stopp)
         # Anname tulpadele lühemad pealkirjad
-        df.columns = ['temp_heat', 'temp_tank', 'temp_out', 'con_heat', 'con_tank', 'gen_heat', 'gen_tank']
-        sel_cols = ['con_heat', 'con_tank', 'gen_heat', 'gen_tank']
+        df.columns = ['temp_heat_zone1', 'temp_heat_zone2', 'temp_tank', 'temp_out', 'con_heat', 'con_tank', 'gen_heat', 'gen_tank']
+        # sel_cols = ['con_heat', 'con_tank', 'gen_heat', 'gen_tank']
         # Perioodi andmed kokku
-        df_period = df[sel_cols].sum()
-        cop_period = df_period['gen_heat'] / df_period['con_heat']
+        # df_period = df[sel_cols].sum()
+        # cop_period = df_period['gen_heat'] / df_period['con_heat']
         # Perioodi andmed kuude kaupa
-        df_months = df[sel_cols].groupby([df.index.year, df.index.month]).sum()
-        cop_months = df_months['gen_heat'] / df_months['con_heat']
+        # df_months = df[sel_cols].groupby([df.index.year, df.index.month]).sum()
+        # cop_months = df_months['gen_heat'] / df_months['con_heat']
         # Perioodi andmed päevade kaupa
-        df_days = df[sel_cols].groupby([df.index.year, df.index.month, df.index.day]).sum()
-        cop_days = df_days['gen_heat'] / df_days['con_heat']
+        # df_days = df[sel_cols].groupby([df.index.year, df.index.month, df.index.day]).sum()
+        # cop_days = df_days['gen_heat'] / df_days['con_heat']
+        # Perioodi andmed tundide kaupa
+        df['cop'] = df['gen_heat'] / df['con_heat']
         # Loome sõnastiku
         andmed = {
-            'period': cop_period,
-            'months': cop_months,
-            'days': cop_days
+            # 'period': cop_period,
+            # 'months': cop_months,
+            # 'days': cop_days,
+            'hours': df
         }
         return andmed
 
@@ -432,6 +428,7 @@ class ElektrileviData():
                         decimal = ','
                         # 2021.03 muudeti failiformaati
                         # 2022.02 muudeti failiformaati
+                        # 2025.04 muudeti failiformaati
                         faili_moodustamise_aeg = fail.split('.')[0][-6:]
                         faili_moodustamise_aeg_aasta = int(faili_moodustamise_aeg[:4])
                         faili_moodustamise_aeg_kuu = int(faili_moodustamise_aeg[-2:])
@@ -441,6 +438,9 @@ class ElektrileviData():
                         if datetime(faili_moodustamise_aeg_aasta, faili_moodustamise_aeg_kuu, 1) > datetime(2022, 1, 31):
                             skiprows = 12
                             usecols = [0, 4]
+                        if datetime(faili_moodustamise_aeg_aasta, faili_moodustamise_aeg_kuu, 1) > datetime(2025, 2, 28):
+                            skiprows = 12
+                            usecols = [0, 2]
                         print('Loeme faili: ', fail)
                         data = pd.read_csv(
                             fail,
@@ -451,6 +451,10 @@ class ElektrileviData():
                             decimal = decimal, # Murdosa eraldajaks on koma
                             usecols=usecols
                         ).dropna(how='any') # Loeme ainult täielike andmetega veerud Algusaeg, Lõppaeg ja Kogus
+                        if datetime(faili_moodustamise_aeg_aasta, faili_moodustamise_aeg_kuu, 1) > datetime(2025, 2, 28):
+                            data = data.set_index('Timestamp')
+                            data = data.resample('H').sum()
+                            data = data.rename_axis('Timestamp').reset_index()
                         ajf.append(data)
             self.af = pd.concat(ajf[:], axis=0).drop_duplicates() # Ühendame andmefreimid ja kõrvaldame duplikaadid
             self.af = self.af.set_index('Timestamp')
@@ -1173,19 +1177,27 @@ if __name__ == "__main__":
     # df = bd.kuukaupa()
     # df = bd.perioodikaupa()
     df = bd.tunnikaupa()
-    mask = (df.index.get_level_values(0) == 2024)
+    mask = (df.index.get_level_values(0) > 2021)
     dff = df.loc[mask]
-    cols = ['Elektri kulu EE+EL [€]', 'EE leping [€]', 'EE muutuv [€]']
+    cols = [
+        'Elektri kulu EE+EL [€]', 
+        'EE leping [€]', 
+        'EE muutuv [€]'
+    ]
     result = dff[cols].groupby([dff.index.get_level_values('Kuu'), dff.index.get_level_values('Päev')]).sum()
     # print(result)
 
-    cols = ['Elektrienergia kulu [kWh]', 'EE leping [€]', 'EE muutuv [€]']
+    cols = [
+        'Elektrienergia kulu [kWh]', 
+        'EE leping [€]', 
+        'EE muutuv [€]'
+    ]
     col_elektrienergia_kulu_sum = dff[cols].\
-        groupby([dff.index.get_level_values('Kuu'), dff.index.get_level_values('Päev')]).\
+        groupby([dff.index.get_level_values('Aasta'), dff.index.get_level_values('Kuu'), dff.index.get_level_values('Päev')]).\
         sum().round(2)
     cols = ['NordPool hind [s/kWh]']
     col_nordpool_hind_min = dff[cols]. \
-        groupby([dff.index.get_level_values('Kuu'), dff.index.get_level_values('Päev')]). \
+        groupby([dff.index.get_level_values('Aasta'), dff.index.get_level_values('Kuu'), dff.index.get_level_values('Päev')]). \
         min().round(2)
     result = pd.concat(
         [col_elektrienergia_kulu_sum, col_nordpool_hind_min],
@@ -1203,7 +1215,7 @@ if __name__ == "__main__":
     #     'NP min [€]'
     ]
     v6rdlus = result[cols]
-    result = v6rdlus.groupby([v6rdlus.index.get_level_values('Kuu')]).sum()
+    result = v6rdlus.groupby([v6rdlus.index.get_level_values('Aasta'), v6rdlus.index.get_level_values('Kuu')]).sum()
     print(result)
     print(result.sum())
 
