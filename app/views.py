@@ -12,7 +12,7 @@ from django.shortcuts import render
 import pytz
 
 import requests
-import tinytuya # https://pypi.org/project/tinytuya/
+# import tinytuya # https://pypi.org/project/tinytuya/
 
 import app.utils.aquarea_service_util as aqserv
 # import app.utils.aquarea_smart_util as aqsmrt
