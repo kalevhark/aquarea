@@ -6,3 +6,4 @@ __pycache__/
 /cop_temp_7.xlsx
 /app/utils/dev_conf.py
 /aquarea/settings.ini
+/app/utils/aquarea_service_download.py

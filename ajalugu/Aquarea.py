@@ -462,7 +462,7 @@ class ElektrileviData():
             # Kirjutame andmed pickle faili
             with open(pickle_file_name, 'wb') as f:
                 # Pickle the 'data' dictionary using the highest protocol available.
-                pickle.dump(self.af, f, pickle.HIGHEST_PROTOCOL)
+                pickle.dump(self.af, f, pickle.DEFAULT_PROTOCOL)
         aeg = datetime.now() - algus
         print(f'{src}: {aeg.seconds}.{aeg.microseconds:06d}s')
 
@@ -597,7 +597,7 @@ class IlmateenistusData():
             # Kirjutame andmed pickle faili
             with open(pickle_file_name, 'wb') as f:
                 # Pickle the 'data' dictionary using the highest protocol available.
-                pickle.dump(self.af, f, pickle.HIGHEST_PROTOCOL)
+                pickle.dump(self.af, f, pickle.DEFAULT_PROTOCOL)
         aeg = datetime.now() - algus
         print(f'{src}: {aeg.seconds}.{aeg.microseconds:06d}s')
 
@@ -683,7 +683,7 @@ class NordPoolData():
             # Kirjutame andmed pickle faili
             with open(pickle_file_name, 'wb') as f:
                 # Pickle the 'data' dictionary using the highest protocol available.
-                pickle.dump(self.af, f, pickle.HIGHEST_PROTOCOL)
+                pickle.dump(self.af, f, pickle.DEFAULT_PROTOCOL)
         aeg = datetime.now() - algus
         print(f'{src}: {aeg.seconds}.{aeg.microseconds:06d}s')
 

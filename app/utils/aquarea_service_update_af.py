@@ -152,6 +152,6 @@ if __name__ == "__main__":
         # Kirjutame andmed pickle faili
         with open(AF_FILE, 'wb') as f:
             # Pickle the 'data' dictionary using the highest protocol available.
-            pickle.dump(af, f, pickle.HIGHEST_PROTOCOL)
+            pickle.dump(af, f, pickle.DEFAULT_PROTOCOL)
         
     
