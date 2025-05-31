@@ -19,6 +19,8 @@ try:
     from django.conf import settings
     AQUAREA_USR = settings.AQUAREA_USR
     AQUAREA_PWD_SERVICE = settings.AQUAREA_PWD_SERVICE
+    AQUAREA_SELECTEDGWID = settings.AQUAREA_SELECTEDGWID
+    AQUAREA_SELECTEDDEVICEID = settings.AQUAREA_SELECTEDDEVICEID
 except:
     # import os
     # os.environ['DJANGO_SETTINGS_MODULE'] = 'dashboard.settings'
@@ -28,6 +30,8 @@ except:
     from app.utils import dev_conf
     AQUAREA_USR = dev_conf.AQUAREA_USR
     AQUAREA_PWD_SERVICE = dev_conf.AQUAREA_PWD_SERVICE
+    AQUAREA_SELECTEDGWID = dev_conf.AQUAREA_SELECTEDGWID
+    AQUAREA_SELECTEDDEVICEID = dev_conf.AQUAREA_SELECTEDDEVICEID
 
 import pytz
 
@@ -128,8 +132,8 @@ def loe_logiandmed_veebist(verbose=True):
     LOGOUT_URL = 'https://aquarea-service.panasonic.com/installer/api/auth/logout'
 
     # Panasonicu kliendiparameetrid
-    gwUid = '01236fba-5dc8-445a-92ff-30f6c27082c1'
-    deviceId = '008007B197792584001434545313831373030634345373130434345373138313931304300000000'
+    gwUid = AQUAREA_SELECTEDGWID
+    deviceId = AQUAREA_SELECTEDDEVICEID
 
     params = {
         'var.loginId': AQUAREA_USR,
