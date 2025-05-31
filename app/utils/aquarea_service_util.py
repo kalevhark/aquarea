@@ -243,6 +243,10 @@ def arvuta_aquareaservice_andmed(verbose=False):
 
     # Töötleme andmed graafiku jaoks
     elements = [
+        0, # Operation [1:Off, 2:On]
+        2, # Mode [1:Tank, 2:Heat, 3:Cool, 8:Auto, 9:Auto(Heat), 10:Auto(Cool)]
+        3, # Tank [1:Off, 2:On]
+        4, # Zone1-Zone2 On-Off [1:On-Off, 2:Off-On, 3:On-On]
         41,  # Actual outdoor temperature [°C]
         42,  # Inlet water temperature [°C]
         43,  # Outlet water temperature [°C]
@@ -258,6 +262,7 @@ def arvuta_aquareaservice_andmed(verbose=False):
         47,  # Zone2: Water temperature (Target) [°C]
     ]
 
+    operation_actual = dict()
     # graafiku andmeread
     act_outd_temp = []
     ilet_water_temp = []
@@ -352,8 +357,15 @@ def arvuta_aquareaservice_andmed(verbose=False):
     kuu_heat = float_or_zero(hist_consum_data['kuu_heat']) + t2na_heat
     kuu_tank = float_or_zero(hist_consum_data['kuu_tank']) + t2na_tank
 
+    if logiandmed_dict:
+        operation_actual[''] = logiandmed_dict[-1][0] # Operation [1:Off, 2:On]
+        operation_actual[''] = logiandmed_dict[-1][2] # Mode [1:Tank, 2:Heat, 3:Cool, 8:Auto, 9:Auto(Heat), 10:Auto(Cool)]
+        operation_actual[''] = logiandmed_dict[-1][3] # Tank [1:Off, 2:On]
+        operation_actual[''] = logiandmed_dict[-1][4] # Zone1-Zone2 On-Off [1:On-Off, 2:Off-On, 3:On-On]
+
     status = {
         'datetime': pytz.timezone('Europe/Tallinn').localize(row_date),
+        'operation_actual': operation_actual,
         'act_outd_temp': act_outd_temp[-1][1],
         'ilet_water_temp': ilet_water_temp[-1][1],
         'olet_water_temp': olet_water_temp[-1][1],
