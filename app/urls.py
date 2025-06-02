@@ -6,6 +6,7 @@ from . import views
 app_name = 'app'
 
 urlpatterns = [
+    path('', views.index, name='index'),
     path('app/', views.index, name='index'),
     path('get_xaxis_categories', views.get_xaxis_categories, name='get_xaxis_categories'),
     path('get_yrno_forecast', views.get_yrno_forecast, name='get_yrno_forecast'),
