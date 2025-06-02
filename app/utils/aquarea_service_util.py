@@ -453,15 +453,15 @@ def read_aquarea_data_from_pickle():
     # Tarbmine sel kuul
     vahemik = (
         (af.index.year == t2na.year) &
-        (af.index.month == t2na.month) &
-        (af.index < eile_0hour)
+        (af.index.month == t2na.month) # &
+        # (af.index < eile_0hour)
     )
     andmed = af[vahemik]
-    print(
-        andmed.shape,
-        andmed['Heat mode energy consumption [kW]'].apply(lambda x: x / 60 * 5).sum(),
-        andmed['Tank mode energy consumption [kW]'].apply(lambda x: x / 60 * 5).sum(),
-    )
+    # print(
+    #     andmed.shape,
+    #     andmed['Heat mode energy consumption [kW]'].apply(lambda x: x / 60 * 5).sum(),
+    #     andmed['Tank mode energy consumption [kW]'].apply(lambda x: x / 60 * 5).sum(),
+    # )
     data_consum['kuu_heat'] = andmed['Heat mode energy consumption [kW]'].apply(lambda x: x / 60 * 5).sum()
     data_consum['kuu_tank'] = andmed['Tank mode energy consumption [kW]'].apply(lambda x: x / 60 * 5).sum()
 
