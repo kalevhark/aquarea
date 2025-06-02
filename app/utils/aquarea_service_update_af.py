@@ -133,6 +133,7 @@ def read_df_from_file(new_datafile_glob):
         decimal='.',
         dtype=dtype,
         parse_dates=[0],
+        date_format="%d.%b.%Y %H:%M:%S",
         usecols=cols,
     )
     df = df.set_index('Timestamp')

@@ -33,6 +33,8 @@ except:
     AQUAREA_SELECTEDGWID = dev_conf.AQUAREA_SELECTEDGWID
     AQUAREA_SELECTEDDEVICEID = dev_conf.AQUAREA_SELECTEDDEVICEID
 
+print('aquarea:', AQUAREA_SELECTEDGWID, AQUAREA_SELECTEDDEVICEID)
+
 import pytz
 
 def float_or_none(datafield:str):
@@ -132,8 +134,8 @@ def loe_logiandmed_veebist(verbose=True):
     LOGOUT_URL = 'https://aquarea-service.panasonic.com/installer/api/auth/logout'
 
     # Panasonicu kliendiparameetrid
-    gwUid = AQUAREA_SELECTEDGWID
-    deviceId = AQUAREA_SELECTEDDEVICEID
+    gwUid = '01236fba-5dc8-445a-92ff-30f6c27082c1'
+    deviceId = '008007B197792584001434545313831373030634345373130434345373138313931304300000000'
 
     params = {
         'var.loginId': AQUAREA_USR,
@@ -357,15 +359,16 @@ def arvuta_aquareaservice_andmed(verbose=False):
                     [logiandmed_dict[row][el] for el in elements]
                 )
     
+    if logiandmed_dict:
+        operation_actual['Operation'] = logiandmed_dict[row][0] # Operation [1:Off, 2:On]
+        operation_actual['Mode'] = logiandmed_dict[row][2] # Mode [1:Tank, 2:Heat, 3:Cool, 8:Auto, 9:Auto(Heat), 10:Auto(Cool)]
+        operation_actual['Tank'] = logiandmed_dict[row][3] # Tank [1:Off, 2:On]
+        operation_actual['Zone1-Zone2 On-Off'] = logiandmed_dict[row][4] # Zone1-Zone2 On-Off [1:On-Off, 2:Off-On, 3:On-On]
+    
     hist_consum_data = read_aquarea_data_from_pickle()
     kuu_heat = float_or_zero(hist_consum_data['kuu_heat']) + t2na_heat
     kuu_tank = float_or_zero(hist_consum_data['kuu_tank']) + t2na_tank
 
-    if logiandmed_dict:
-        operation_actual[''] = logiandmed_dict[-1][0] # Operation [1:Off, 2:On]
-        operation_actual[''] = logiandmed_dict[-1][2] # Mode [1:Tank, 2:Heat, 3:Cool, 8:Auto, 9:Auto(Heat), 10:Auto(Cool)]
-        operation_actual[''] = logiandmed_dict[-1][3] # Tank [1:Off, 2:On]
-        operation_actual[''] = logiandmed_dict[-1][4] # Zone1-Zone2 On-Off [1:On-Off, 2:Off-On, 3:On-On]
 
     status = {
         'datetime': pytz.timezone('Europe/Tallinn').localize(row_date),

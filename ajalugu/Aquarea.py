@@ -565,14 +565,16 @@ class IlmateenistusData():
                     if entry.name.startswith(
                             'Ilmateenistus_Valga') and entry.is_file():  # Loeme ainult Elektrilevi logifailid andmefreimidesse
                         fail = os.path.join(bd_DATA_DIR, entry.name)
-                        date_parser = lambda t: datetime.strptime(t, '%Y-%m-%d %H:%M:%S')
+                        date_format = '%Y-%m-%d %H:%M:%S'
+                        # date_parser = lambda t: datetime.strptime(t, '%Y-%m-%d %H:%M:%S')
+                        
                         # 2022.06 muudeti kuupäevaformaati
                         faili_moodustamise_aeg = fail.split('.')[0][-6:]
                         faili_moodustamise_aeg_aasta = int(faili_moodustamise_aeg[:4])
                         faili_moodustamise_aeg_kuu = int(faili_moodustamise_aeg[-2:])
-                        if datetime(
-                                faili_moodustamise_aeg_aasta, faili_moodustamise_aeg_kuu, 1) > datetime(2022, 5, 31):
-                            date_parser = lambda t: datetime.strptime(t, '%Y-%m-%d %H:%M:%S:00')
+                        if datetime(faili_moodustamise_aeg_aasta, faili_moodustamise_aeg_kuu, 1) > datetime(2022, 5, 31):
+                            # date_parser = lambda t: datetime.strptime(t, '%Y-%m-%d %H:%M:%S:00')
+                            date_format = '%Y-%m-%d %H:%M:%S:00'
                         print('Loeme faili: ', fail)
                         ajf.append(
                             pd.read_csv(
@@ -588,7 +590,8 @@ class IlmateenistusData():
                                     'Timestamp'
                                 ], # Kasutame osa veerge ja paneme nimed
                                 parse_dates=[5],
-                                date_parser=date_parser
+                                date_format=date_format,
+                                # date_parser=date_parser
                             )
                         )
             self.af = pd.concat(ajf[:], axis=0).drop_duplicates() # Ühendame andmefreimid ja kõrvaldame duplikaadid

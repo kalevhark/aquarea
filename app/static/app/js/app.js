@@ -141,14 +141,36 @@ function update_aquarea_serv_data(url, chart) {
       elZone1Status_temp.text(data.status.z1_water_temp);
       let elZone1Status_temp_target = $('#zone1Status_temp_target');
       elZone1Status_temp_target.text(data.status.z1_water_temp_target);
-      
+      // Zone 1 operation status
+      if (data.status.operation_actual['Operation'] === "2" && data.status.operation_actual['Mode'] === "2" && ['1', '3'].includes(data.status.operation_actual['Zone1-Zone2 On-Off'])) {
+        elZone1Status_temp_target.addClass('color-red');
+        elZone1Status_temp_target.show();
+        if (data.status.heat_con_last > 0) { // TODO: Aqueare zone 1 status?
+          elZone1Status_temp.addClass('color-red');
+        }
+      } else {
+        elZone1Status_temp_target.hide();
+      };
+      $("#img21").removeClass('spinner');
+
       // Zone 2 
       // actual/target
       let elZone2Status_temp = $('#z2_water_temp');
       elZone2Status_temp.text(data.status.z2_water_temp);
       let elZone2Status_temp_target = $('#zone2Status_temp_target');
       elZone2Status_temp_target.text(data.status.z2_water_temp_target);
-      
+      // Zone 2 operation status
+      if (data.status.operation_actual['Operation'] === "2" && data.status.operation_actual['Mode'] === "2" && ['2', '3'].includes(data.status.operation_actual['Zone1-Zone2 On-Off'])) {
+        elZone2Status_temp_target.addClass('color-red');
+        elZone2Status_temp_target.show();
+        if (data.status.heat_con_last > 0) { // TODO: Aqueare zone 2 status?
+          elZone2Status_temp.addClass('color-red');
+        }
+      } else {
+        elZone2Status_temp_target.hide();
+      };
+      $("#img22").removeClass('spinner');
+
       // Pump Inlet/Outlet water
       let elOlet_water_temp = $('#olet_water_temp');
       elOlet_water_temp.text(data.status.olet_water_temp.toFixed(1));
@@ -162,6 +184,19 @@ function update_aquarea_serv_data(url, chart) {
       elTankStatus_temp_now.text(data.status.tank_temp);
       let elTankStatus_temp_target = $('#tankStatus_temp_target');
       elTankStatus_temp_target.text(data.status.tank_temp_target);
+      // Tank operation status
+      elTankStatus_temp_target.removeClass('color-red color-green');
+      if (data.status.operation_actual['Operation'] === "2" && data.status.operation_actual['Mode'] === "1") {
+        console.log('tank');
+        elTankStatus_temp_target.show();
+        elTankStatus_temp_target.addClass('color-red');
+        if (data.status.tank_con_last > 0) {
+          elTankStatus_temp_now.addClass('color-red');
+        }
+      } else {
+        elTankStatus_temp_target.hide();
+      };
+      $("#img23").removeClass('spinner');
 
       // Outdoor temp from Aquarea
       let elAct_outd_temp = $('#act_outd_temp')
@@ -173,54 +208,8 @@ function update_aquarea_serv_data(url, chart) {
       }
       $("#img31").removeClass('spinner');
 
-      // Zone 1 operation status
-      if (data.status.heat_con_last > 0) { // TODO: Aqueare zone 1 status?
-        $("#z1_water_temp").addClass('color-red');
-        elZone1StatusTempTarget = $("#zone1Status_temp_target")
-        elZone1StatusTempTarget.removeClass('color-red color-green');
-        elZone1StatusTempTarget.show();
-        // if (data.status.status[0].specialStatus[0].operationStatus === 1) {
-        //   elZone1StatusTempTarget.addClass('color-green');
-        // }
-        // if (data.status.status[0].specialStatus[1].operationStatus === 1) {
-        //   elZone1StatusTempTarget.addClass('color-red');
-        // }
-      } else {
-        $("#zone1Status_temp_target").hide();
-      };
-      $("#img21").removeClass('spinner');
-
-      // Zone 1 operation status
-      if (data.status.heat_con_last > 0) { // TODO: Aqueare zone 2 status?
-        $("#z2_water_temp").addClass('color-red');
-        elZone2StatusTempTarget = $("#zone2Status_temp_target")
-        elZone2StatusTempTarget.removeClass('color-red color-green');
-        elZone2StatusTempTarget.show();
-        // if (data.status.status[0].specialStatus[0].operationStatus === 1) {
-        //   elZone2StatusTempTarget.addClass('color-green');
-        // }
-        // if (data.status.status[0].specialStatus[1].operationStatus === 1) {
-        //   elZone2StatusTempTarget.addClass('color-red');
-        // }
-      } else {
-        $("#zone2Status_temp_target").hide();
-      };
-      $("#img22").removeClass('spinner');
-
-      // Tank operation status
-      if (data.status.tank_con_last > 0) { // TODO: Aqueare tank status?
-        $("#tankStatus_temp_target").show();
-        $("#tankStatus_temp_now").addClass('color-red');
-      } else {
-        $("#tankStatus_temp_target").hide();
-      };
-      $("#img23").removeClass('spinner');
-
       // Tarbimisandmete kokkuvõte ja võrdlus
-      $("#img23").removeClass('spinner');
-
       $('.text-day').css("visibility", "visible");
-
       $('#aquarea_consum_date').text(dateString);
 
       $('#t2na_tot').text((data.status.t2na_tot).toFixed(1));
