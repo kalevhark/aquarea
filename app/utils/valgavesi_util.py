@@ -86,5 +86,5 @@ if __name__ == '__main__':
     headers = login()
     csv_resp = get_csvdata(headers)
     # save_consum(csv_resp)
-    show_consum(csv_resp, months=6)
+    show_consum(csv_resp, months=3)
     logout(headers)

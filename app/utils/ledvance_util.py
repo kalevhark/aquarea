@@ -18,10 +18,15 @@ except:
     TUYA_IP_ADDRESS_2 = dev_conf.TUYA_IP_ADDRESS_2
     TUYA_LOCAL_KEY_2 = dev_conf.TUYA_LOCAL_KEY_2
 
+# tinytuya for python3.13 if cryptography not supported
+# python -m pip install pycryptodome
+# python -m pip install colorama
+# python -m pip install requests
+# python -m pip install --no-deps tinytuya
 import tinytuya
 
-# Device credentials
 
+# Device credentials
 
 ledvance_1 = tinytuya.OutletDevice(TUYA_DEVICE_ID, TUYA_IP_ADDRESS, TUYA_LOCAL_KEY)
 ledvance_1.set_version(3.3)
@@ -72,7 +77,7 @@ def countdown(ledvance=1, seconds=0):
     data = status(ledvance)
     return data
 
-def turnon(ledvance=1, hours=0):
+def turnon(ledvance=1, hours=1):
     d[ledvance].turn_on(switch=1)
     d[ledvance].set_value(9, hours * 60 * 60)  # lülitame välja x tunni aja pärast
     # Show status and state of first controlled switch on device

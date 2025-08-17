@@ -1180,7 +1180,7 @@ if __name__ == "__main__":
     # df = bd.kuukaupa()
     # df = bd.perioodikaupa()
     df = bd.tunnikaupa()
-    mask = (df.index.get_level_values(0) > 2021)
+    mask = (df.index.get_level_values(0) > 2024)
     dff = df.loc[mask]
     cols = [
         'Elektri kulu EE+EL [€]', 
@@ -1190,6 +1190,7 @@ if __name__ == "__main__":
     result = dff[cols].groupby([dff.index.get_level_values('Kuu'), dff.index.get_level_values('Päev')]).sum()
     # print(result)
 
+    # V6rdlus lepingu hind vs börsihind
     cols = [
         'Elektrienergia kulu [kWh]', 
         'EE leping [€]', 
@@ -1206,7 +1207,7 @@ if __name__ == "__main__":
         [col_elektrienergia_kulu_sum, col_nordpool_hind_min],
         axis=1
     )  # Liidame andmed üheks tabeliks
-    print(result.columns)
+    # print(result.columns)
 
     MARGINAAL = 0.44 / 1.2 # EE marginaal km-ta
     # Teoreetiline maksumus, kui v6tta aluseks p2eva k6ige madalam tunnihind
@@ -1214,11 +1215,12 @@ if __name__ == "__main__":
     cols = [
         'EE leping [€]',
         'EE muutuv [€]',
-        'NordPool hind [s/kWh]',
-    #     'NP min [€]'
+        # 'NordPool hind [s/kWh]',
+        # 'NP min [€]'
     ]
     v6rdlus = result[cols]
     result = v6rdlus.groupby([v6rdlus.index.get_level_values('Aasta'), v6rdlus.index.get_level_values('Kuu')]).sum()
+    print('\n' + 'V6rdlus lepingu hind vs börsihind (ilma kuutasuta):')
     print(result)
     print(result.sum())
 
