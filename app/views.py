@@ -18,7 +18,7 @@ import app.utils.aquarea_service_util as aqserv
 # import app.utils.aquarea_smart_util as aqsmrt
 from app.utils.astral_util import get_day_or_night_plotbands
 import app.utils.ephem_util as ephem_data
-# from app.utils import ledvance_util
+from app.utils import ledvance_util
 import app.utils.nps_util as nps_util
 
 DEBUG = False
