@@ -449,7 +449,7 @@ def read_aquarea_data_from_pickle():
         # The protocol version used is detected automatically, so we do not
         # have to specify it.
         af = pickle.load(f)
-    print(af.shape, af.columns)
+    # print(af.shape, af.columns)
 
     # Tarbmine sel kuul
     vahemik = (
@@ -463,8 +463,18 @@ def read_aquarea_data_from_pickle():
     #     andmed['Heat mode energy consumption [kW]'].apply(lambda x: x / 60 * 5).sum(),
     #     andmed['Tank mode energy consumption [kW]'].apply(lambda x: x / 60 * 5).sum(),
     # )
-    data_consum['kuu_heat'] = andmed['Heat mode energy consumption [kW]'].apply(lambda x: x / 60 * 5).sum()
-    data_consum['kuu_tank'] = andmed['Tank mode energy consumption [kW]'].apply(lambda x: x / 60 * 5).sum()
+    data_consum['kuu_heat'] = (
+        andmed['Heat mode energy consumption [kW]']
+            .apply(lambda x: x / 60 * 5)
+            .sum()
+            .astype(float)
+    )
+    data_consum['kuu_tank'] = (
+        andmed['Tank mode energy consumption [kW]']
+            .apply(lambda x: x / 60 * 5)
+            .sum()
+            .astype(float)
+    )
 
     # Tarbmine eelmisel aastal samal kuul
     vahemik = (
@@ -472,13 +482,23 @@ def read_aquarea_data_from_pickle():
         (af.index.month == t2na.month)
     )
     andmed = af[vahemik]
-    print(
-        andmed.shape,
-        andmed['Heat mode energy consumption [kW]'].apply(lambda x: x / 60 * 5).sum(),
-        andmed['Tank mode energy consumption [kW]'].apply(lambda x: x / 60 * 5).sum(),
+    # print(
+    #     andmed.shape,
+    #     andmed['Heat mode energy consumption [kW]'].apply(lambda x: x / 60 * 5).sum(),
+    #     andmed['Tank mode energy consumption [kW]'].apply(lambda x: x / 60 * 5).sum(),
+    # )
+    data_consum['kuu_aasta_tagasi_heat'] = (
+        andmed['Heat mode energy consumption [kW]']
+            .apply(lambda x: x / 60 * 5)
+            .sum()
+            .astype(float)
     )
-    data_consum['kuu_aasta_tagasi_heat'] = andmed['Heat mode energy consumption [kW]'].apply(lambda x: x / 60 * 5).sum()
-    data_consum['kuu_aasta_tagasi_tank'] = andmed['Tank mode energy consumption [kW]'].apply(lambda x: x / 60 * 5).sum()
+    data_consum['kuu_aasta_tagasi_tank'] = (
+        andmed['Tank mode energy consumption [kW]']
+            .apply(lambda x: x / 60 * 5)
+            .sum()
+            .astype(float)
+    )
 
     # Tarbmine eelmisel kuul
     vahemik = (
@@ -486,13 +506,23 @@ def read_aquarea_data_from_pickle():
         (af.index.month == t2na.month - 1 if t2na.month > 2 else 12)
     )
     andmed = af[vahemik]
-    print(
-        andmed.shape,
-        andmed['Heat mode energy consumption [kW]'].apply(lambda x: x / 60 * 5).sum(),
-        andmed['Tank mode energy consumption [kW]'].apply(lambda x: x / 60 * 5).sum(),
+    # print(
+    #     andmed.shape,
+    #     andmed['Heat mode energy consumption [kW]'].apply(lambda x: x / 60 * 5).sum(),
+    #     andmed['Tank mode energy consumption [kW]'].apply(lambda x: x / 60 * 5).sum(),
+    # )
+    data_consum['kuu_eelmine_heat'] = (
+        andmed['Heat mode energy consumption [kW]']
+            .apply(lambda x: x / 60 * 5)
+            .sum()
+            .astype(float)
     )
-    data_consum['kuu_eelmine_heat'] = andmed['Heat mode energy consumption [kW]'].apply(lambda x: x / 60 * 5).sum()
-    data_consum['kuu_eelmine_tank'] = andmed['Tank mode energy consumption [kW]'].apply(lambda x: x / 60 * 5).sum()
+    data_consum['kuu_eelmine_tank'] = (
+        andmed['Tank mode energy consumption [kW]']
+            .apply(lambda x: x / 60 * 5)
+            .sum()
+            .astype(float)
+    )
 
     # Tarbimine sel perioodil
     if t2na > datetime(t2na.year, 7, 1):
@@ -506,13 +536,23 @@ def read_aquarea_data_from_pickle():
             (af.index >= datetime(t2na.year - 1, 7, 1))
         )
     andmed = af[vahemik]
-    print(
-        andmed.shape,
-        andmed['Heat mode energy consumption [kW]'].apply(lambda x: x / 60 * 5).sum(),
-        andmed['Tank mode energy consumption [kW]'].apply(lambda x: x / 60 * 5).sum(),
+    # print(
+    #     andmed.shape,
+    #     andmed['Heat mode energy consumption [kW]'].apply(lambda x: x / 60 * 5).sum(),
+    #     andmed['Tank mode energy consumption [kW]'].apply(lambda x: x / 60 * 5).sum(),
+    # )
+    data_consum['jooksva_perioodi_heat'] = (
+        andmed['Heat mode energy consumption [kW]']
+            .apply(lambda x: x / 60 * 5)
+            .sum()
+            .astype(float)
     )
-    data_consum['jooksva_perioodi_heat'] = andmed['Heat mode energy consumption [kW]'].apply(lambda x: x / 60 * 5).sum().astype(float)
-    data_consum['jooksva_perioodi_tank'] = andmed['Tank mode energy consumption [kW]'].apply(lambda x: x / 60 * 5).sum().astype(float)
+    data_consum['jooksva_perioodi_tank'] = (
+        andmed['Tank mode energy consumption [kW]']
+            .apply(lambda x: x / 60 * 5)
+            .sum()
+            .astype(float)
+    )
 
     # Tarbimine eelmisel perioodil
     if t2na > datetime(t2na.year, 7, 1):
@@ -526,13 +566,23 @@ def read_aquarea_data_from_pickle():
             (af.index >= datetime(t2na.year - 2, 7, 1))
         )
     andmed = af[vahemik]
-    print(
-        andmed.shape,
-        andmed['Heat mode energy consumption [kW]'].apply(lambda x: x / 60 * 5).sum(),
-        andmed['Tank mode energy consumption [kW]'].apply(lambda x: x / 60 * 5).sum(),
+    # print(
+    #     andmed.shape,
+    #     andmed['Heat mode energy consumption [kW]'].apply(lambda x: x / 60 * 5).sum(),
+    #     andmed['Tank mode energy consumption [kW]'].apply(lambda x: x / 60 * 5).sum(),
+    # )
+    data_consum['eelmise_perioodi_heat'] = (
+        andmed['Heat mode energy consumption [kW]']
+            .apply(lambda x: x / 60 * 5)
+            .sum()
+            .astype(float)
     )
-    data_consum['eelmise_perioodi_heat'] = andmed['Heat mode energy consumption [kW]'].apply(lambda x: x / 60 * 5).sum().astype(float)
-    data_consum['eelmise_perioodi_tank'] = andmed['Tank mode energy consumption [kW]'].apply(lambda x: x / 60 * 5).sum().astype(float)
+    data_consum['eelmise_perioodi_tank'] = (
+        andmed['Tank mode energy consumption [kW]']
+            .apply(lambda x: x / 60 * 5)
+            .sum()
+            .astype(float)
+    )
     return data_consum
 
 def update_db():
