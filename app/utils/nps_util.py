@@ -30,6 +30,7 @@ m2rgiga = lambda i: ("+" if i > 0 else "") + str(i)
 from pytz import timezone
 import pytz
 
+K2IBEMAKS = 1.22
 MARGINAAL = 0.44 # senti/kWh km-ga
 # Kuup2evad
 TALLINN = timezone('Europe/Tallinn')
@@ -76,12 +77,13 @@ def get_nps_12plus12_hour_prices_ee_marginaaliga():
     return {
         'nps_12plus12_hour_prices': [
             {
-                'y': round(el['price'] / 1000 * 100 * 1.2 + MARGINAAL, 3),
-                'color': '#9E32A8' if round(el['price'] / 1000 * 100 * 1.2 + MARGINAAL, 3) > last_30days_prices_mean else 'green',
+                'y': round(el['price'] / 1000 * 100 * K2IBEMAKS + MARGINAAL, 3),
+                'color': '#9E32A8' if round(el['price'] / 1000 * 100 * K2IBEMAKS + MARGINAAL, 3) > last_30days_prices_mean else 'green',
                 'last_30days_prices_mean': last_30days_prices_mean
             }
             for el
             in prices
+            if el['timestamp'] % 3600 == 0 # täistundide kohta TODO: vaja teha tunni keskmine
         ]
     }
 
