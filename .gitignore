@@ -1,10 +1,8 @@
+.env
+/db.sqlite3
 /static
 __pycache__/
-/db.sqlite3
-/cop_temp_-7.xlsx
-/cop_temp_0.xlsx
-/cop_temp_7.xlsx
+*.ini
+*.log
 /app/utils/dev_conf.py
-/aquarea/settings.ini
 /app/utils/aquarea_service_download.py
-/aioaquarea/settings.ini
