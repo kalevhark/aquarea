@@ -451,6 +451,7 @@ class ElektrileviData():
                             decimal = decimal, # Murdosa eraldajaks on koma
                             usecols=usecols
                         ).dropna(how='any') # Loeme ainult täielike andmetega veerud Algusaeg, Lõppaeg ja Kogus
+                        # alates 2025.10 15-minuti kaupa arvestus
                         if datetime(faili_moodustamise_aeg_aasta, faili_moodustamise_aeg_kuu, 1) > datetime(2025, 2, 28):
                             data = data.set_index('Timestamp')
                             data = data.resample('H').sum()

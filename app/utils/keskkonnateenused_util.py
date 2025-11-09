@@ -1,9 +1,7 @@
 import requests
+from dev_conf import KKT_LEPINGUD
 
-LEPINGUD = {
-    'S9a': '2801667',
-    'K19': '1644020',
-}
+LEPINGUD = KKT_LEPINGUD
 
 # BASE_URL = 'https://www.keskkonnateenused.ee/customer-support/next-shipping-day?contractNumber='
 API_URL = "https://cms.keskkonnateenused.ee/wp-json/general-purpose-api/upcoming-discharges"
@@ -17,11 +15,24 @@ def get_next_servicedata(leping):
     else:
         return None
     
-
-if __name__ == "__main__":
+def get_tyhjendused():
+    tyhjendused = []
     for aadress in LEPINGUD.keys():
         leping = LEPINGUD[aadress]
         data = get_next_servicedata(leping)
         if data:
             for tyhjendus in data:
-                print(aadress, tyhjendus['date'], tyhjendus['garbage'], tyhjendus['itemType'])
+                tyhjendused.append(
+                    {
+                        'aadress': aadress,
+                        'date': tyhjendus['date'],
+                        'garbage': tyhjendus['garbage'],
+                        'itemType': tyhjendus['itemType']
+                    }
+                )
+    return tyhjendused
+    
+if __name__ == "__main__":
+    tyhjendused = get_tyhjendused()
+    for tyhjendus in sorted(tyhjendused, key=lambda tyhjendus: tyhjendus['date']):
+        print(tyhjendus['aadress'], tyhjendus['date'], tyhjendus['garbage'], tyhjendus['itemType'])
