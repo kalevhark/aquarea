@@ -1,5 +1,3 @@
-print('views')
-
 from datetime import datetime, timedelta
 import math
 

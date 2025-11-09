@@ -7,3 +7,4 @@ __pycache__/
 /app/utils/dev_conf.py
 /aquarea/settings.ini
 /app/utils/aquarea_service_download.py
+/aioaquarea/settings.ini
