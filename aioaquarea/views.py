@@ -2,6 +2,7 @@ import aiohttp
 import asyncio
 from datetime import datetime, timedelta, timezone
 import logging
+import time
 
 from .api_client import AquareaAPIClient
 from .const import (
@@ -194,11 +195,18 @@ async def get_status():
             environment=AquareaEnvironment.PRODUCTION,
         )
         
-        # Or the device can also be retrieved by its long id if we know it:
-        device = await client.get_device(
-            device_id=AQUAREA_SELECTEDGWID, 
-            # consumption_refresh_interval=timedelta(minutes=1)
-        )
+        tries = 3
+        while tries > 0:
+            try:
+                device = await client.get_device(
+                    device_id=AQUAREA_SELECTEDGWID, 
+                    # consumption_refresh_interval=timedelta(minutes=1)
+                )
+                break
+            except:
+                tries -= 1
+                time.sleep(10)
+
         
         # await print_device_info(device)
         return device
@@ -241,5 +249,5 @@ if __name__ == "__main__":
     logging.basicConfig(filename='aioaquarea.log', level=logging.INFO)
     logger.info(f'Started {datetime.now()}')
     # asyncio.run(get_status())
-    unknown()
+    # unknown()
     logger.info(f'Finished {datetime.now()}')
