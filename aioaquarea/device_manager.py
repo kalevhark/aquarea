@@ -1,9 +1,9 @@
 import logging
 from typing import TYPE_CHECKING
 
-from auth import CCAppVersion, PanasonicRequestHeader, PanasonicSettings
-from const import BASE_PATH_ACC
-from data import (
+from .auth import CCAppVersion, PanasonicRequestHeader, PanasonicSettings
+from .const import BASE_PATH_ACC
+from .data import (
     DeviceDirection,
     DeviceInfo,
     DeviceModeStatus,
@@ -25,10 +25,10 @@ from data import (
     StatusDataMode,
     TankStatus,
 )
-from errors import RequestFailedError  # Import RequestFailedError
+from .errors import RequestFailedError  # Import RequestFailedError
 
 if TYPE_CHECKING:
-    from core import AquareaClient
+    from .core import AquareaClient
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -128,9 +128,6 @@ class DeviceManager:
                                 model,  # Added model
                                 zones,
                                 StatusDataMode.LIVE,  # Added status_data_mode
-                            )
-                            _LOGGER.info(
-                                f"get_devices: Device {device_id} has_tank: {has_tank}, raw device_raw: {device_raw}"
                             )
                             self._device_indexer[device_id] = device_id
                             self._devices.append(device_info)

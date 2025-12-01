@@ -8,9 +8,9 @@ from datetime import datetime
 from enum import Enum, IntEnum # , StrEnum
 from strenum import StrEnum # asendus
 
-from const import PANASONIC, AQUAREA_SERVICE_DEVICES, AQUAREA_SERVICE_A2W_STATUS_DISPLAY
-from statistics import Consumption, ConsumptionType
-from util import LimitedSizeDict, limit_range
+from .const import PANASONIC, AQUAREA_SERVICE_DEVICES, AQUAREA_SERVICE_A2W_STATUS_DISPLAY
+from .statistics import Consumption, ConsumptionType
+from .util import LimitedSizeDict, limit_range
 
 
 class ZoneSensor(StrEnum):

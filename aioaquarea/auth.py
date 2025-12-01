@@ -12,7 +12,7 @@ import urllib.parse
 import aiohttp
 from bs4 import BeautifulSoup
 
-from const import (
+from .const import (
     APP_CLIENT_ID,
     AUTH_0_CLIENT,
     AUTH_API_USER_AGENT,
@@ -23,7 +23,7 @@ from const import (
     REDIRECT_URI,
     AquareaEnvironment,
 )
-from errors import AuthenticationError, AuthenticationErrorCodes
+from .errors import AuthenticationError, AuthenticationErrorCodes
 
 _LOGGER = logging.getLogger(__name__)
 

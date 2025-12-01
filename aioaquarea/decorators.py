@@ -2,14 +2,14 @@ import functools
 import logging
 from typing import TYPE_CHECKING  # Re-add TYPE_CHECKING
 
-from errors import (  # Added ApiError
+from .errors import (  # Added ApiError
     ApiError,
     AuthenticationError,
     AuthenticationErrorCodes,
 )
 
 if TYPE_CHECKING:  # Re-add TYPE_CHECKING block
-    from core import AquareaClient
+    from .core import AquareaClient
 
 _LOGGER = logging.getLogger(__name__)
 

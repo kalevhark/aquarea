@@ -10,11 +10,11 @@ from venv import logger
 
 import aiohttp
 
-from api_client import AquareaAPIClient
-from auth import Authenticator, CCAppVersion, PanasonicSettings
-from const import AQUAREA_SERVICE_BASE, AQUAREA_SERVICE_DEMO_BASE, ZONEINFO, AquareaEnvironment
-from consumption_manager import AquareaConsumptionManager
-from data import (
+from .api_client import AquareaAPIClient
+from .auth import Authenticator, CCAppVersion, PanasonicSettings
+from .const import AQUAREA_SERVICE_BASE, AQUAREA_SERVICE_DEMO_BASE, ZONEINFO, AquareaEnvironment
+from .consumption_manager import AquareaConsumptionManager
+from .data import (
     Device,
     DeviceInfo,
     DeviceStatus,
@@ -29,11 +29,11 @@ from data import (
     UpdateOperationMode,
     ZoneTemperatureSetUpdate,
 )
-from decorators import auth_required
-from device_control import AquareaDeviceControl
-from device_manager import DeviceManager
-from entities import DeviceImpl
-from statistics import Consumption, DateType
+from .decorators import auth_required
+from .device_control import AquareaDeviceControl
+from .device_manager import DeviceManager
+from .entities import DeviceImpl
+from .statistics import Consumption, DateType
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -187,7 +187,7 @@ class AquareaClient:  # Renamed Client to AquareaClient
                 self._settings.expires_at, tz=dt.timezone.utc
             )
             # Removed await self._device_manager.get_groups() as it's not a public method and device fetching handles it.
-            logger.info(f'Access Token {self._api_client.access_token}: {self._api_client.token_expiration}')
+            # logger.info(f'Access Token {self._api_client.access_token}: {self._api_client.token_expiration}')
         finally:
             self._login_lock.release()
 

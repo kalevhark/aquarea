@@ -3,7 +3,7 @@ import datetime as dt
 import logging
 from typing import TYPE_CHECKING, Optional
 
-from data import (
+from .data import (
     Device,
     DeviceInfo,
     DeviceModeStatus,
@@ -24,11 +24,11 @@ from data import (
     UpdateOperationMode,
     ZoneTemperatureSetUpdate,
 )
-from errors import DataNotAvailableError
-from statistics import Consumption, ConsumptionType, DateType
+from .errors import DataNotAvailableError
+from .statistics import Consumption, ConsumptionType, DateType
 
 if TYPE_CHECKING:
-    from core import AquareaClient
+    from .core import AquareaClient
 
 _LOGGER = logging.getLogger(__name__)
 

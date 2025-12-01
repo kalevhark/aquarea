@@ -31,8 +31,11 @@ def get_tyhjendused():
                     }
                 )
     return tyhjendused
-    
-if __name__ == "__main__":
+
+def main():
     tyhjendused = get_tyhjendused()
     for tyhjendus in sorted(tyhjendused, key=lambda tyhjendus: tyhjendus['date']):
         print(tyhjendus['aadress'], tyhjendus['date'], tyhjendus['garbage'], tyhjendus['itemType'])
+
+if __name__ == "__main__":
+    main()

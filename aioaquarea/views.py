@@ -3,14 +3,14 @@ import asyncio
 from datetime import datetime, timedelta, timezone
 import logging
 
-from api_client import AquareaAPIClient
-from const import (
+from .api_client import AquareaAPIClient
+from .const import (
     AQUAREA_USR,
     AQUAREA_PWD,
     AQUAREA_SELECTEDGWID
 )
-from core import AquareaClient, AquareaEnvironment
-from data import (
+from .core import AquareaClient, AquareaEnvironment
+from .data import (
     AQUAREA_SERVICE_DEVICES,
     AQUAREA_SERVICE_A2W_STATUS_DISPLAY,
     DeviceZone,
@@ -25,8 +25,8 @@ from data import (
     UpdateOperationMode,
     ZoneTemperatureSetUpdate,
 )
-from entities import DeviceImpl
-# from statistics import Consumption, DateType
+from .entities import DeviceImpl
+from .statistics import Consumption, DateType
 
 logger = logging.getLogger(__name__)
 
@@ -40,26 +40,22 @@ async def print_device_info(
         'Soojuspump:', device.device_name, device.device_id, # device.long_id,
     )
     print(
-        device.temperature_outdoor,
+        'Outdoor:', device.temperature_outdoor,
     )
+    for zone in [1, 2]:
+        print(
+            device.zones[zone].name, 
+            device.zones[zone].operation_status, 
+            device.zones[zone].temperature, 
+            device.zones[zone].heat_target_temperature,
+            device.zones[zone].eco,
+            device.zones[zone].comfort
+        )
     print(
-        device.zones[1].name, 
-        device.zones[1].operation_status, 
-        device.zones[1].temperature, 
-        device.zones[1].heat_target_temperature,
-        device.zones[1].eco,
-        device.zones[1].comfort
-    )
-    print(
-        device.zones[2].name, 
-        device.zones[2].operation_status, 
-        device.zones[2].temperature, 
-        device.zones[2].heat_target_temperature,
-        device.zones[2].eco,
-        device.zones[2].comfort
-    )
-    print(
-        device.tank.operation_status, device.tank.temperature, device.tank.target_temperature
+        'Tank',
+        device.tank.operation_status, 
+        device.tank.temperature, 
+        device.tank.target_temperature
     )
 
 async def post_device_set_special_status(
@@ -187,14 +183,7 @@ async def post_device_tank_operation_status(
         throw_on_error=True,
     )
 
-# Küsib nädalaseadistuse andmed ja tagastab dict() vormingus
-async def get_weekly_timer_data(
-    client: AquareaAPIClient,
-    device: DeviceImpl
-):
-    pass
-
-async def main():
+async def get_status():
     async with aiohttp.ClientSession() as session:
         client = AquareaClient(
             username=AQUAREA_USR,
@@ -211,44 +200,46 @@ async def main():
             # consumption_refresh_interval=timedelta(minutes=1)
         )
         
-        await print_device_info(device)
+        # await print_device_info(device)
+        return device
 
-        # consumption_list = await client.get_device_consumption(
-        #     device.long_id,
-        #     DateType.DAY,
-        #     "20251102" # Use YYYYMM01 for month mode
-        # )
+def get_tank_status():
+    device = asyncio.run(get_status())
+    return {
+        'device_operation_status': device.operation_status,
+        'temperature_outdoor': device.temperature_outdoor,
+        'tank_operation_status': device.tank.operation_status, 
+        'tank_temperature': device.tank.temperature, 
+        'tank_target_temperature': device.tank.target_temperature
+    }
 
-        # for item in consumption_list:
-        #     print(item.heat_consumption, item.tank_consumption)
+def unknown():
+    special_status = SpecialStatus.NORMAL
+    
+    # await post_device_set_special_status(
+    #     client=client,
+    #     device=device,
+    #     special_status=special_status,
+    # )
 
-        # await get_weekly_timer_data(client, device)
+    new_operation_status = OperationStatus.ON
 
-        special_status = SpecialStatus.NORMAL
-        
-        # await post_device_set_special_status(
-        #     client=client,
-        #     device=device,
-        #     special_status=special_status,
-        # )
+    # await post_device_tank_operation_status(
+    #     client=client,
+    #     device=device,
+    #     new_operation_status=new_operation_status,
+    # )
 
-        new_operation_status = OperationStatus.ON
-
-        # await post_device_tank_operation_status(
-        #     client=client,
-        #     device=device,
-        #     new_operation_status=new_operation_status,
-        # )
-
-        # await post_device_force_dhw(
-        #     client=client,
-        #     device=device,
-        #     force_dhw=ForceDHW.OFF,
-        # )
+    # await post_device_force_dhw(
+    #     client=client,
+    #     device=device,
+    #     force_dhw=ForceDHW.OFF,
+    # )
 
 
 if __name__ == "__main__":
     logging.basicConfig(filename='aioaquarea.log', level=logging.INFO)
     logger.info(f'Started {datetime.now()}')
-    asyncio.run(main())
+    # asyncio.run(get_status())
+    unknown()
     logger.info(f'Finished {datetime.now()}')

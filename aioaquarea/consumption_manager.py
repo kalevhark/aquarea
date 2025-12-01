@@ -4,11 +4,11 @@ import datetime as dt
 import logging
 from typing import TYPE_CHECKING
 
-from errors import ApiError, AuthenticationError
-from statistics import Consumption, DateType
+from .errors import ApiError, AuthenticationError
+from .statistics import Consumption, DateType
 
 if TYPE_CHECKING:
-    from api_client import AquareaAPIClient
+    from .api_client import AquareaAPIClient
 
 _LOGGER = logging.getLogger(__name__)
 

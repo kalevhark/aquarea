@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from auth import PanasonicRequestHeader
-from const import AQUAREA_SERVICE_A2W_STATUS_DISPLAY, AQUAREA_SERVICE_DEVICES
-from data import (
+from .auth import PanasonicRequestHeader
+from .const import AQUAREA_SERVICE_A2W_STATUS_DISPLAY, AQUAREA_SERVICE_DEVICES
+from .data import (
     DeviceZoneStatus,
     ForceDHW,
     ForceHeater,
@@ -18,7 +18,7 @@ from data import (
 )
 
 if TYPE_CHECKING:
-    from api_client import AquareaAPIClient
+    from .api_client import AquareaAPIClient
 
 
 class AquareaDeviceControl:

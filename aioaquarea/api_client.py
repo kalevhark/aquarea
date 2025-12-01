@@ -5,9 +5,9 @@ from typing import Optional
 
 import aiohttp
 
-from auth import CCAppVersion, PanasonicRequestHeader, PanasonicSettings
-from const import AQUAREA_SERVICE_BASE, AQUAREA_SERVICE_DEMO_BASE, AquareaEnvironment
-from errors import ApiError, AuthenticationError, AuthenticationErrorCodes
+from .auth import CCAppVersion, PanasonicRequestHeader, PanasonicSettings
+from .const import AQUAREA_SERVICE_BASE, AQUAREA_SERVICE_DEMO_BASE, AquareaEnvironment
+from .errors import ApiError, AuthenticationError, AuthenticationErrorCodes
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -79,9 +79,9 @@ class AquareaAPIClient:
             # If external_url is not provided, join the base_url with the given url
             url = urllib.parse.urljoin(self._base_url, url)
         resp = await self._sess.request(method, url, **kwargs)
-        self._logger.info(
-            f"api_client response: {url}: {resp}"
-        )
+        # self._logger.info(
+        #     f"api_client response: {url}: {resp}"
+        # )
         if resp.content_type == "application/json":
             data = await resp.json()
 
