@@ -7,6 +7,7 @@ import pandas as pd
 import pytz
 
 from django.conf import settings
+import holidays
 
 try:
     DATA_DIR = os.path.join(settings.STATIC_ROOT, 'data')
@@ -28,21 +29,24 @@ def soodus(aeg):
     if aeg.weekday() > 4: # 5-laupäev, 6-pühapäev
         return True
     if aeg >= datetime(2022, 3, 1, tzinfo=tz): # alates 01.03.2022 uus soodusaja arvestus
-        riigipyhad = [
-            (aasta, 1, 1),
-            (aasta, 2, 24),
-            (2022, 4, 15), (2023, 4, 7), (2024, 3, 29), (2025, 4, 18), # Suur reede
-            (2022, 4, 17), (2023, 4, 9), (2024, 3, 31), # Ülestõusmispühade 1. püha P
-            (aasta, 5, 1),
-            (2022, 6, 5), (2023, 5, 28), (2024, 5, 19), # Nelipühade 1. püha P
-            (aasta, 6, 23),
-            (aasta, 6, 24),
-            (aasta, 8, 20),
-            (aasta, 12, 24),
-            (aasta, 12, 25),
-            (aasta, 12, 26),
-        ]
-        if aeg.date() in [date(*datetuple) for datetuple in riigipyhad]:
+        # riigipyhad = [
+        #     (aasta, 1, 1),
+        #     (aasta, 2, 24),
+        #     (2022, 4, 15), (2023, 4, 7), (2024, 3, 29), (2025, 4, 18), # Suur reede
+        #     (2022, 4, 17), (2023, 4, 9), (2024, 3, 31), # Ülestõusmispühade 1. püha P
+        #     (aasta, 5, 1),
+        #     (2022, 6, 5), (2023, 5, 28), (2024, 5, 19), # Nelipühade 1. püha P
+        #     (aasta, 6, 23),
+        #     (aasta, 6, 24),
+        #     (aasta, 8, 20),
+        #     (aasta, 12, 24),
+        #     (aasta, 12, 25),
+        #     (aasta, 12, 26),
+        # ]
+        # if aeg.date() in [date(*datetuple) for datetuple in riigipyhad]:
+        #     return True
+        ee_holidays = holidays.EE()
+        if aeg.date() in ee_holidays:
             return True
         if aeg.hour < 7 or aeg.hour >= 22:
             return True
