@@ -148,7 +148,7 @@ class DeviceManager:
                 throw_on_error=True,
             )
             json_response = await response.json()
-            self._logger.info(
+            self._logger.debug(
                 f"get_device_status (live): Raw JSON response for device {device_info.device_id}: {json_response}"
             )
         except Exception as e:
