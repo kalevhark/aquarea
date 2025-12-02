@@ -1164,7 +1164,7 @@ if __name__ == "__main__":
 
     # print(result['Actual outdoor temperature [°C]'].mean())
     # result['Actual outdoor temperature [°C]'].hist()
-    import matplotlib.pyplot as plt
+    # import matplotlib.pyplot as plt
 
     # plot
     # plt.title('temps')
