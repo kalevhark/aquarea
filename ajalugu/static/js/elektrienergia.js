@@ -42,22 +42,37 @@ function makeHeatmapN2dalakaupaChart(container, data, title, unit) {
       align: 'left',
       x: 40
     },
-
     xAxis: {
       title: {
-        text: 'tunnid'
+        text: null
       },
-      min: 0,
-      max: 23,
       labels: {
-        align: 'left',
-        x: 5,
-        y: 14
+          format: '{value}:00'
       },
-      showLastLabel: false,
-      tickLength: 16,
-      tickPositions: [...evennumbers(1, 23)],
+      minPadding: 0,
+      maxPadding: 0,
+      startOnTick: false,
+      endOnTick: false,
+      tickPositions: [0, 6, 12, 18, 24],
+      tickWidth: 1,
+      //min: 0,
+      max: 23
     },
+    // xAxis: {
+    //   title: {
+    //     text: 'tunnid'
+    //   },
+    //   min: 0,
+    //   max: 23,
+    //   labels: {
+    //     align: 'left',
+    //     x: 5,
+    //     y: 14
+    //   },
+    //   showLastLabel: false,
+    //   tickLength: 16,
+    //   tickPositions: [...evennumbers(1, 23)],
+    // },
 
     yAxis: {
       title: {
@@ -97,7 +112,7 @@ function makeHeatmapN2dalakaupaChart(container, data, title, unit) {
       // nullColor: '#EFEFEF',
       // colsize: 24 * 36e5, // one day
       tooltip: {
-        headerFormat: 'Tarbimine:<br/>',
+        headerFormat: [title, unit, '<br/>'].join(' '),
         // pointFormat: '{point.y} {point.x}: <b>{point.value}</b>',
         pointFormatter: function () {
           n2dalap2ev = getEstonianWeekdays(this.y);
