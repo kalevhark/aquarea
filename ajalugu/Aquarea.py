@@ -1140,7 +1140,7 @@ if __name__ == "__main__":
     print('Arvutame...')
     bdy = EEYldHindData()
     print(bdy)
-    bda = AquareaData()
+    bda = AquareaData() 
     print(bda)
     bde = ElektrileviData()
     print(bde)

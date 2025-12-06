@@ -75,13 +75,16 @@ def change_ledvance_status(tank_status, ledvance_status):
                 # print('LDV off')
                 logger.info(f'LDV off: {temperature_now}>{heat_max}')
                 return
-        else: # Kui v2listemperatuur on v2iksem Aquarea tarbevee efektiivsest tootmistemperatuuris (COP < 1)
-            if (outdoorNow < OUTDOOR_TANK_EFFICENCY_TEMP) and (gap > dhw_gap):
+        
+        if (outdoorNow < OUTDOOR_TANK_EFFICENCY_TEMP): # Kui v2listemperatuur on v2iksem Aquarea tarbevee efektiivsest tootmistemperatuuris (COP < 1)
+            if (gap > dhw_gap):
                 ledvance_util.turnon(ledvance=LEDVANCE, hours=1) # lülitame ledvance sisse
                 # print('LDV on=1h')
                 logger.info(f'LDV on=1h: {temperature_now}->{heat_set}>{dhw_gap}')
             else:
                 logger.info(f'LDV no action: {temperature_now}->{heat_set}<{dhw_gap}')
+        else:
+            logger.info(f'LDV no action: välistemperatuur {outdoorNow}>{OUTDOOR_TANK_EFFICENCY_TEMP}')
 
 def main():
     # Define the path
