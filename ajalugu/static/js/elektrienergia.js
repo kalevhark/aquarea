@@ -327,7 +327,7 @@ function makeContainerCopHourlyChart(container, data, title) {
         marker: {
           radius: 1,
         },
-        name: 'Hourly COP',
+        name: 'Hourly COP (0)',
         color: '#2caffe'
       },
       {
@@ -335,7 +335,7 @@ function makeContainerCopHourlyChart(container, data, title) {
         marker: {
           radius: 1,
         },
-        name: 'Hourly COP',
+        name: 'Hourly COP (+5)',
         color: 'red'
       },
       {
@@ -343,7 +343,7 @@ function makeContainerCopHourlyChart(container, data, title) {
         marker: {
           radius: 1,
         },
-        name: 'Hourly COP',
+        name: 'Hourly COP (-5)',
         color: 'green'
       },
     ]

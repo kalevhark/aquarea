@@ -1003,7 +1003,7 @@ def container_cop_hourly_chart(request):
     return JsonResponse(
         {
             'andmed': andmed,
-            'count': df.shape,
+            'count': df.shape[0],
         },
         safe=False
     )
