@@ -279,6 +279,77 @@ function makeHeatmapN2dalakaupa3dChart(container, data, title, unit) {
   }(Highcharts));
 }
 
+function makeContainerCopHourlyChart(container, data, title) {
+  let andmed = data['andmed'];
+  let count = data['count'];
+  Highcharts.chart(container, {
+
+    chart: {
+      type: 'scatter',
+      zooming: {
+        type: 'x'
+      }
+    },
+
+    title: {
+      text: title,
+      align: 'left'
+    },
+
+    subtitle: {
+      text: 'n=' + count,
+      align: 'left'
+    },
+
+    accessibility: {
+      screenReaderSection: {
+        beforeChartFormat: '<{headingTagName}>' +
+            '{chartTitle}</{headingTagName}><div>{chartSubtitle}</div>' +
+            '<div>{chartLongdesc}</div><div>{xAxisDescription}</div><div>' +
+            '{yAxisDescription}</div>'
+      }
+    },
+
+    tooltip: {
+      valueDecimals: 2,
+      pointFormatter: function() {
+        return Highcharts.dateFormat('%d %b %H:%M', this.x) + ": "+ Highcharts.numberFormat(this.y, 1)
+      }
+    },
+
+    xAxis: {
+      type: 'datetime',
+    },
+
+    series: [
+      {
+        data: andmed["0"],
+        marker: {
+          radius: 1,
+        },
+        name: 'Hourly COP',
+        color: '#2caffe'
+      },
+      {
+        data: andmed["5"],
+        marker: {
+          radius: 1,
+        },
+        name: 'Hourly COP',
+        color: 'red'
+      },
+      {
+        data: andmed["-5"],
+        marker: {
+          radius: 1,
+        },
+        name: 'Hourly COP',
+        color: 'green'
+      },
+    ]
+  });
+}
+
 function container_elektrilevi_n2dalakaupa_chart() {
   // Küsib andmed kuude kaupa andmed ja teeb tabeli
   let container = "container_elektrilevi_n2dalakaupa_chart";
@@ -354,6 +425,33 @@ function container_nordpool_n2dalakaupa_chart() {
   });
 }
 
+function container_cop_hourly_chart() {
+  // Küsib andmed kuude kaupa andmed ja teeb tabeli
+  let container = "container_cop_hourly_chart"
+  let loaderDiv5 = "#loaderDiv5"
+  $.ajax({
+    url: $("#" + container).attr("data-url"),
+    dataType: 'json',
+    beforeSend: function() {
+      $(loaderDiv5).show();
+    },
+    success: function (data) {
+      // console.log(data);
+      makeContainerCopHourlyChart(
+        container,
+        data,
+        'COP',
+      );
+    },
+    error: function (XMLHttpRequest, textstatus, errorThrown) {
+	    alert(textstatus);
+    },
+    complete: function () {
+      $(loaderDiv5).hide();
+	  }
+  });
+}
+
 //Nupule vajutusega kuu edasi või tagasi valikuks
 function change_month() {
   $('.changeMonth').click(function(){
@@ -407,4 +505,5 @@ $(document).ready(function() {
   change_month();
   container_elektrilevi_n2dalakaupa_chart();
   container_nordpool_n2dalakaupa_chart();
+  container_cop_hourly_chart();
 });

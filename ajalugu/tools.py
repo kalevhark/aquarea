@@ -44,7 +44,7 @@ async def show_cop_analysis(
     andmed['date'] = andmed.apply(lambda row: dt.datetime(*row.name), axis = 1)
     andmed['date_ordinal'] = pd.to_datetime(andmed['date']).map(dt.datetime.toordinal)
     slope, intercept, r_value, p_value, std_err = stats.linregress(andmed['date_ordinal'], andmed['cop'])
-    print(temp, f'{slope:.10f}')
+    print(andmed['date'].count(), temp, f'{slope:.10f}')
 
 if __name__ == '__main__':
     asyncio.run(main())

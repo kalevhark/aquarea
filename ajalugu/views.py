@@ -979,3 +979,32 @@ def container_nordpool_n2dalakaupa_chart(request):
             'count': query['count'],
         },
         safe=False)
+
+def container_cop_hourly_chart(request):
+    """
+    Tagastab Aquarea COP andmed graafiku jaoks
+    :param request:
+    :return andmed:list
+    """
+    andmed = dict()
+    df = bda.tunniandmed()
+
+    for temp in [-5, 0, 5]:
+        filter = (
+            (df['Heat mode energy consumption [kW]'] > 0) &
+            (df['Heat mode energy generation [kW]'] > 0) &
+            (df['Actual outdoor temperature [°C]'] == temp)
+        )
+        df_filtered = df[filter].copy()
+        values = df_filtered['Heat mode energy generation [kW]'] / df_filtered['Heat mode energy consumption [kW]']
+        df_filtered['cop'] = values
+        df_filtered['date'] = df_filtered.apply(lambda row: datetime(*row.name), axis = 1)
+        andmed[str(temp)] = [[date.timestamp()*1000, cop] for date, cop in zip(df_filtered['date'].tolist(), df_filtered['cop'].tolist())]
+    return JsonResponse(
+        {
+            'andmed': andmed,
+            'count': df.shape,
+        },
+        safe=False
+    )
+

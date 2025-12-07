@@ -78,6 +78,18 @@
       </div>
     </div>
   </div>
+
+  <!-- Kolmas graafikute rida -->
+  <div class="w3-row">
+    <div class="w3-center" id="loaderDiv5">
+      <img src="{% static 'img/ajax-loader-bar.gif' %}" >
+    </div>
+    <div
+            id="container_cop_hourly_chart"
+            data-url="{% url 'ajalugu:container_cop_hourly_chart' %}"
+            style="min-width: 400px; height: 400px; margin: 0 auto">
+    </div>
+  </div>
 {% endblock %}
 
 {% block javascript %}

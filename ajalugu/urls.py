@@ -40,7 +40,7 @@ urlpatterns = [
         name='container_ajalugu_index_cop_chart'
     ),
     path(
-        'elektrienergia',
+        'elektrienergia/',
         views.PerioodElektrienergiaFormView.as_view(),
         name='elektrienergia'
     ),
@@ -53,6 +53,11 @@ urlpatterns = [
         'container_nordpool_n2dalakaupa_chart/',
         views.container_nordpool_n2dalakaupa_chart,
         name='container_nordpool_n2dalakaupa_chart'
+    ),
+    path(
+        'container_cop_hourly_chart/',
+        views.container_cop_hourly_chart,
+        name='container_cop_hourly_chart'
     ),
 ]
 
