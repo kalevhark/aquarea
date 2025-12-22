@@ -996,10 +996,12 @@ def container_cop_hourly_chart(request):
             (df['Actual outdoor temperature [°C]'] == temp)
         )
         df_filtered = df[filter].copy()
-        values = df_filtered['Heat mode energy generation [kW]'] / df_filtered['Heat mode energy consumption [kW]']
-        df_filtered['cop'] = values
+        df_filtered['cop'] = df_filtered['Heat mode energy generation [kW]'] / df_filtered['Heat mode energy consumption [kW]']
         df_filtered['date'] = df_filtered.apply(lambda row: datetime(*row.name), axis = 1)
-        andmed[str(temp)] = [[date.timestamp()*1000, cop] for date, cop in zip(df_filtered['date'].tolist(), df_filtered['cop'].tolist())]
+        andmed[str(temp)] = {
+            'values': [[date.timestamp()*1000, cop] for date, cop in zip(df_filtered['date'].tolist(), df_filtered['cop'].tolist())],
+            'mean': df_filtered.loc[:, 'cop'].mean().astype(float)
+        }
     return JsonResponse(
         {
             'andmed': andmed,

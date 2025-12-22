@@ -2,7 +2,7 @@
 # Aquarea soojuspumba targaks juhtimiseks
 # Käivitamiseks:
 # /python-env-path-to/python3 /path-to-wiki-app/tasks.py
-from datetime import datetime
+import datetime as dt
 import logging
 from pathlib import Path
 from zoneinfo import ZoneInfo
@@ -13,6 +13,8 @@ OUTDOOR_TANK_EFFICENCY_TEMP = 5 # õhutemperatuur, millest alates COP>=1,6
 DHW_TANK_GAP_NIGHT = 4 # millisest temperatuurilangusest alates hakatakse kütma tarbevett soodusajal
 DHW_TANK_GAP_DAY = 6 # millisest temperatuurilangusest alates hakatakse kütma tarbevett normaalajal
 LEDVANCE = 1 # Milline smartswitch on boileri elektritoide
+
+EST_TZ = ZoneInfo("Europe/Tallinn")
 
 # Kui on vaja Django mooduleid
 if __name__ == "__main__":
@@ -26,17 +28,17 @@ from app.utils import ledvance_util
 
 logger = logging.getLogger(__name__)
 
-def on_enefit_soodusaeg():
-    est_tz = ZoneInfo("Europe/Tallinn")
-    now = datetime.now(est_tz)
+def on_enefit_soodusaeg(
+        dt_now: dt.datetime = dt.datetime.now(EST_TZ)
+    ) -> bool:
     
     # Saame Eesti riigipühad
     ee_holidays = holidays.EE()
     
     # Tingimused
-    is_weekend = now.weekday() >= 5
-    is_holiday = now in ee_holidays
-    is_night_hours = now.hour >= 22 or now.hour < 7
+    is_weekend = dt_now.weekday() >= 5
+    is_holiday = dt_now in ee_holidays
+    is_night_hours = dt_now.hour >= 22 or dt_now.hour < 7
     
     # Kui on nädalavahetus VÕI riigipüha VÕI ööaeg -> Soodus
     if is_weekend or is_holiday or is_night_hours:
@@ -55,9 +57,26 @@ def on_enefit_soodusaeg():
 
     return is_cheap
     
-def change_ledvance_status(tank_status, ledvance_status):
+def dhw_gap_correction(
+    dt_now: dt.datetime
+) -> int:
+    """Kui algamas v6i l6ppemas on soodusaeg, siis korrigeerib max temperatuuri v2lpa"""
+    # Kontrollime kas tunni aja jooksul algab soodusaeg
+    if on_enefit_soodusaeg(dt_now) == False and on_enefit_soodusaeg(dt_now + dt.timedelta(hours=1)) == True:
+        return +1
+    # Kontrollime kas tunni aja jooksul l6peb soodusaeg
+    if on_enefit_soodusaeg(dt_now) == True and on_enefit_soodusaeg(dt_now + dt.timedelta(hours=1)) == False:
+        return -1
+    return 0
+
+def change_ledvance_status(
+    tank_status: dict, 
+    ledvance_status: dict
+) -> None:
     if isinstance(tank_status, dict):
-        dhw_gap = DHW_TANK_GAP_NIGHT if on_enefit_soodusaeg() else DHW_TANK_GAP_DAY
+        dhw_gap = DHW_TANK_GAP_NIGHT if on_enefit_soodusaeg(dt.datetime.now(EST_TZ)) else DHW_TANK_GAP_DAY
+        # Korrigeerime, kui soodusaja algus/l6pp tunni aja jooksul
+        dhw_gap = dhw_gap + dhw_gap_correction(dt.datetime.now(EST_TZ))
 
         # Aquarea registreeritud välistemperatuur
         outdoorNow = tank_status['temperature_outdoor']
@@ -84,7 +103,7 @@ def change_ledvance_status(tank_status, ledvance_status):
             else:
                 logger.info(f'LDV no action: {temperature_now}->{heat_set}<{dhw_gap}')
         else:
-            logger.info(f'LDV no action: välistemperatuur {outdoorNow}>{OUTDOOR_TANK_EFFICENCY_TEMP}')
+            logger.info(f'LDV no action: välistemperatuur {outdoorNow}>={OUTDOOR_TANK_EFFICENCY_TEMP}')
 
 def main():
     # Define the path
@@ -94,7 +113,7 @@ def main():
     # 2. Configure logging
     logging.basicConfig(filename=log_file_path, level=logging.INFO)
 
-    logger.info(f'Started {datetime.now()}')
+    logger.info(f'Started {dt.datetime.now(EST_TZ)}')
     
     try:
         tank_status = get_tank_status()
@@ -112,7 +131,7 @@ def main():
     
     if all([tank_status, ledvance_status]):
         change_ledvance_status(tank_status, ledvance_status)
-    logger.info(f'Finished {datetime.now()}')
+    logger.info(f'Finished {dt.datetime.now(EST_TZ)}')
 
 if __name__ == '__main__':
     main()

@@ -321,9 +321,56 @@ function makeContainerCopHourlyChart(container, data, title) {
       type: 'datetime',
     },
 
+    yAxis: {
+      'title': {
+        'text': 'Temperatuur'
+      },
+      'plotLines': [
+        {
+          'color': 'gray',
+          'width': 2,
+          'dashStyle': 'Dot',
+          'value': andmed["0"]["mean"],
+          'zIndex': 5,
+          'label': {
+              'text': 'COP keskmine (0°C) = ' + Highcharts.numberFormat(andmed["0"]["mean"], 1),
+              'align': 'right',
+              'x': 0,
+              'y': 0,
+          }
+        },
+        {
+          'color': 'gray',
+          'width': 2,
+          'dashStyle': 'Dot',
+          'value': andmed["5"]["mean"],
+          'zIndex': 5,
+          'label': {
+              'text': 'COP keskmine (+5°C) = ' + Highcharts.numberFormat(andmed["5"]["mean"], 1),
+              'align': 'right',
+              'x': 0,
+              'y': 0,
+          }
+        },
+        {
+          'color': 'gray',
+          'width': 2,
+          'dashStyle': 'Dot',
+          'value': andmed["-5"]["mean"],
+          'zIndex': 5,
+          'label': {
+              'text': 'COP keskmine (-5°C) = ' + Highcharts.numberFormat(andmed["-5"]["mean"], 1),
+              'align': 'right',
+              'x': 0,
+              'y': 0,
+          }
+        }
+      ]
+    },
+
     series: [
       {
-        data: andmed["0"],
+        data: andmed["0"]["values"],
         marker: {
           radius: 1,
         },
@@ -331,7 +378,7 @@ function makeContainerCopHourlyChart(container, data, title) {
         color: '#2caffe'
       },
       {
-        data: andmed["5"],
+        data: andmed["5"]["values"],
         marker: {
           radius: 1,
         },
@@ -339,7 +386,7 @@ function makeContainerCopHourlyChart(container, data, title) {
         color: 'red'
       },
       {
-        data: andmed["-5"],
+        data: andmed["-5"]["values"],
         marker: {
           radius: 1,
         },
