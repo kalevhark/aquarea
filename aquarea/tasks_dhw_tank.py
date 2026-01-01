@@ -101,7 +101,7 @@ def change_ledvance_status(
                 # print('LDV on=1h')
                 logger.info(f'LDV on=1h: {temperature_now}->{heat_set}>{dhw_gap}')
             else:
-                logger.info(f'LDV no action: {temperature_now}->{heat_set}<{dhw_gap}')
+                logger.info(f'LDV no action: {temperature_now}->{heat_set}<={dhw_gap}')
         else:
             logger.info(f'LDV no action: välistemperatuur {outdoorNow}>={OUTDOOR_TANK_EFFICENCY_TEMP}')
 

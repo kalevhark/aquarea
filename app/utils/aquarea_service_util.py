@@ -501,9 +501,11 @@ def read_aquarea_data_from_pickle():
     )
 
     # Tarbmine eelmisel kuul
+    month_eelmine = t2na.month - 1 if t2na.month > 1 else 12
+    year_eelmine = t2na.year if t2na.month > 1 else t2na.year - 1
     vahemik = (
-        (af.index.year == t2na.year if t2na.month > 2 else t2na.year - 1) &
-        (af.index.month == t2na.month - 1 if t2na.month > 2 else 12)
+        (af.index.year == year_eelmine) &
+        (af.index.month == month_eelmine)
     )
     andmed = af[vahemik]
     # print(
