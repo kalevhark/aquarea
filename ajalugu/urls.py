@@ -40,7 +40,7 @@ urlpatterns = [
         name='container_ajalugu_index_cop_chart'
     ),
     path(
-        'elektrienergia/',
+        'elektrienergia',
         views.PerioodElektrienergiaFormView.as_view(),
         name='elektrienergia'
     ),
