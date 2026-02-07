@@ -22,8 +22,8 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '192.168.1.143',
-    's9a.lan',
+    '192.168.1.212',
+    's9a.lan', 's9a',
     '127.0.0.1', 'localhost',
 ]
 

@@ -1,4 +1,5 @@
 from datetime import date, datetime, timedelta
+from encodings.punycode import T
 import os
 import pickle
 
@@ -98,8 +99,11 @@ class EEYldHindData():
         self.veerg = veerg
         return self.af.columns[veerg]
 
-    # tagastab EE elektrienergia hinna km-ga
-    def EEhind(self, aeg):
+    def EEhind(
+            self, 
+            aeg: tuple
+    ) -> float:
+        '''tagasta EE elektrienergia hinna km-ga'''
         aeg = datetime(*aeg)
         aastakuu = "{0:04d}{1:02d}".format(aeg.year, aeg.month)
         if aastakuu in self.af.index:
@@ -353,12 +357,12 @@ class AquareaData():
             'Heat mode energy consumption [kW]',
             'Tank mode energy consumption [kW]',
             'Heat mode energy generation [kW]',
-            'Tank mode energy generation [kW]'
+            'Tank mode energy generation [kW]',
         ]
 
         data = andmed[cols]
         data = data.groupby(levels).mean()
-
+        data['Soodusaeg'] = data.apply(lambda x: soodus(datetime(x.name[0], x.name[1], x.name[2], x.name[3])), axis=1)
         return data
 
 
@@ -405,6 +409,47 @@ class AquareaData():
         }
         return andmed
 
+
+    def arvuta_kyttekulu_kuus(
+            self,
+            aasta: int = datetime.now().year, 
+            kuu: int = datetime.now().month
+    ) -> dict:
+        '''Arvutab kuu kyttehinna vastavalt lepingule'''
+        aqdata_tunniandmed = self.tunniandmed()
+        # Filtreerime soovitud kuu andmed
+        mask = (
+            (aqdata_tunniandmed.index.get_level_values(0) == aasta) &
+            (aqdata_tunniandmed.index.get_level_values(1) == kuu)
+        )
+        kuu_andmed = aqdata_tunniandmed.loc[mask]
+        
+        # elektri hind EEYldHindData klassist
+        eeyldhind = EEYldHindData().kuudeandmed()
+        aastakuu = "{0:04d}{1:02d}".format(aasta, kuu)
+        if aastakuu not in eeyldhind.index:
+            aastakuu = eeyldhind.index.max()
+        ee_soodus_hind = eeyldhind['EE_Soodus [s/kWh]'][aastakuu]
+        ee_normaal_hind = eeyldhind['EE_Normaal [s/kWh]'][aastakuu]
+        el_soodus_hind = eeyldhind['EL_Soodus [s/kWh]'][aastakuu]
+        el_normaal_hind = eeyldhind['EL_Normaal [s/kWh]'][aastakuu]
+
+        # arvutame kütteenergia kulu soodusaegadel ja mittesoodusaegadel
+        kyttekulu_mittesoodus = (
+            kuu_andmed[kuu_andmed['Soodusaeg'] == False]['Heat mode energy consumption [kW]'].sum() 
+            * (ee_normaal_hind + el_normaal_hind)
+            /100
+        )
+        kyttekulu_soodus = (
+            kuu_andmed[kuu_andmed['Soodusaeg'] == True]['Heat mode energy consumption [kW]'].sum() 
+            * (ee_soodus_hind + el_soodus_hind)
+            /100
+        )
+        
+        return {
+            'mittesoodus': round(float(kyttekulu_mittesoodus), 2),
+            'soodus': round(float(kyttekulu_soodus), 2)
+        }
 
 class ElektrileviData():
     '''Andmed Elektrilevi andmebaasist ja nende töötlused'''   
@@ -1132,6 +1177,7 @@ Aquarea logifaili veerud:
 32. Timestamp
 '''
 
+    
 if __name__ == "__main__":
     from pathlib import Path
     DATA_DIR = Path(__file__).resolve().parent.parent / 'static' / 'data'
@@ -1178,7 +1224,7 @@ if __name__ == "__main__":
             ((result.index.get_level_values(1) == 9) & (result.index.get_level_values(2) > 14))
         )
     )
-    print('Kokku tunniandmete ridu', result.shape[0], 'sh soodusajaga', result.loc[mask].shape[0])
+    print('Kokku tunniandmete ridu', result.shape[0], 'sh kütteperioodis', result.loc[mask].shape[0])
 
     # Testandmed
     # df = bd.p2evakaupa()
@@ -1234,6 +1280,6 @@ if __name__ == "__main__":
     result = pd.concat([g['NordPool hind [s/kWh]'].mean()], axis=1).round(1)
     result.replace([np.inf, -np.inf], np.nan, inplace=True)
     result.dropna(inplace=True)
-    result.to_csv('kontroll_actoutdtemp_vs_npsprice.csv')
+    # result.to_csv('kontroll_actoutdtemp_vs_npsprice.csv')
     # print(result)
 
