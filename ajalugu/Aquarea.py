@@ -417,6 +417,7 @@ class AquareaData():
     ) -> dict:
         '''Arvutab kuu kyttehinna vastavalt lepingule'''
         aqdata_tunniandmed = self.tunniandmed()
+        aqdata_tunniandmed['Soodusaeg'] = aqdata_tunniandmed.apply(lambda x: soodus(datetime(x.name[0], x.name[1], x.name[2], x.name[3])), axis=1)
         # Filtreerime soovitud kuu andmed
         mask = (
             (aqdata_tunniandmed.index.get_level_values(0) == aasta) &
