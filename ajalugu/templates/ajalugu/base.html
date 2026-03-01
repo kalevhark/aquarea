@@ -26,7 +26,7 @@
   <!-- DateJS project -->
   <script src="{% static 'js/date-et-EE.js' %}"></script>
   <!-- HighCharts skriptid -->
-	<script src="https://code.highcharts.com/highcharts.js"></script>
+	{% comment %} <script src="https://code.highcharts.com/highcharts.js"></script>
 	<script src="https://code.highcharts.com/highcharts-more.js"></script>
   <script src="https://code.highcharts.com/highcharts-3d.js"></script>
 	<script src="https://code.highcharts.com/modules/exporting.js"></script>
@@ -36,7 +36,19 @@
   <script src="https://code.highcharts.com/modules/heatmap.js"></script>
   <script src="https://code.highcharts.com/modules/boost.js"></script>
   <script src="https://code.highcharts.com/modules/accessibility.js"></script>
-  <script src="https://code.highcharts.com/themes/adaptive.js"></script>
+  <script src="https://code.highcharts.com/themes/adaptive.js"></script> {% endcomment %}
+
+  <script src="{% static 'app/js/highcharts/12.0.2/highcharts.js' %}"></script>
+  <script src="{% static 'app/js/highcharts/12.0.2/highcharts-more.js' %}"></script>
+  <script src="{% static 'app/js/highcharts/12.5.0/highcharts-3d.js' %}"></script>
+  <script src="{% static 'app/js/highcharts/12.0.2/modules/exporting.js' %}"></script>
+  <script src="{% static 'app/js/highcharts/12.0.2/modules/export-data.js' %}"></script>
+  <script src="{% static 'app/js/highcharts/12.0.2/modules/windbarb.js' %}"></script>
+  <script src="{% static 'app/js/highcharts/12.0.2/modules/histogram-bellcurve.js' %}"></script>
+  <script src="{% static 'app/js/highcharts/12.0.2/modules/heatmap.js' %}"></script>
+  <script src="{% static 'app/js/highcharts/12.0.2/modules/boost.js' %}"></script>
+  <script src="{% static 'app/js/highcharts/12.0.2/modules/accessibility.js' %}"></script>
+  <script src="{% static 'app/js/highcharts/12.5.0/themes/adaptive.js' %}"></script>
 
   {% block extra_head %}
   {% endblock %}

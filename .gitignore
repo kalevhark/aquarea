@@ -9,3 +9,4 @@ __pycache__/
 *.xlsx
 /app/utils/dev_conf.py
 /app/utils/aquarea_service_download.py
+/app/static/app/js/highcharts

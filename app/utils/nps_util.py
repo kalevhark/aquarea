@@ -30,7 +30,7 @@ m2rgiga = lambda i: ("+" if i > 0 else "") + str(i)
 from pytz import timezone
 import pytz
 
-K2IBEMAKS = 1.22
+K2IBEMAKS = 1.24
 MARGINAAL = 0.44 # senti/kWh km-ga
 # Kuup2evad
 TALLINN = timezone('Europe/Tallinn')
