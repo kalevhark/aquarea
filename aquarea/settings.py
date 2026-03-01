@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'ajalugu',
     'app',
     'aioaquarea',
+    'corsheaders', # Vajab installimist: pip install django-cors-headers
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -45,6 +46,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware', # Vajab installimist: pip install django-cors-headers
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -149,3 +151,11 @@ EZR_IP_ADDRESS = config('EZR_IP_ADDRESS')
 VALGAVESI_USERNAME = config('VALGAVESI_USERNAME')
 VALGAVESI_PASSWORD = config('VALGAVESI_PASSWORD')
 VALGAVESI_MOOTURI_NR = config('VALGAVESI_MOOTURI_NR')
+
+# https://stackoverflow.com/questions/77459888/making-request-to-django-restframework-from-a-deployed-django-project
+CORS_ALLOWED_ORIGINS = [
+    "http://s9a.lan",
+    "http://s9a",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+]

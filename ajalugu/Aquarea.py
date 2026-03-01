@@ -362,7 +362,7 @@ class AquareaData():
 
         data = andmed[cols]
         data = data.groupby(levels).mean()
-        data['Soodusaeg'] = data.apply(lambda x: soodus(datetime(x.name[0], x.name[1], x.name[2], x.name[3])), axis=1)
+        # data['Soodusaeg'] = data.apply(lambda x: soodus(datetime(x.name[0], x.name[1], x.name[2], x.name[3])), axis=1)
         return data
 
 
