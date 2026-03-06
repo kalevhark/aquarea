@@ -444,7 +444,7 @@ def read_aquarea_data_from_pickle():
     BASE_DIR = Path(__file__).resolve().parent.parent.parent
     STATIC_ROOT = PurePath.joinpath(BASE_DIR, 'static/')
     failinimi = 'af.pickle'
-    failitee = STATIC_ROOT / 'app' / 'data' / failinimi
+    failitee = STATIC_ROOT / 'data' / 'bda' / failinimi
     with open(failitee, 'rb') as f:
         # The protocol version used is detected automatically, so we do not
         # have to specify it.
