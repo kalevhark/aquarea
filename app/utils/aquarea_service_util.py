@@ -27,13 +27,13 @@ except:
     # import django
     # from django.test.utils import setup_test_environment
     # django.setup()
-    from app.utils import dev_conf
+    import dev_conf
     AQUAREA_USR = dev_conf.AQUAREA_USR
     AQUAREA_PWD_SERVICE = dev_conf.AQUAREA_PWD_SERVICE
-    AQUAREA_SELECTEDGWID = dev_conf.AQUAREA_SELECTEDGWID
-    AQUAREA_SELECTEDDEVICEID = dev_conf.AQUAREA_SELECTEDDEVICEID
+    # AQUAREA_SELECTEDGWID = dev_conf.AQUAREA_SELECTEDGWID
+    # AQUAREA_SELECTEDDEVICEID = dev_conf.AQUAREA_SELECTEDDEVICEID
 
-print('aquarea:', AQUAREA_SELECTEDGWID, AQUAREA_SELECTEDDEVICEID)
+# print('aquarea:', AQUAREA_SELECTEDGWID, AQUAREA_SELECTEDDEVICEID)
 
 import pytz
 
@@ -182,10 +182,11 @@ def loe_logiandmed_veebist(verbose=True):
             REQUEST_URL,
             headers=headers,
         )
-        # print(r.status_code)
-        # print(r.text[:2000])
-        m = re.search("shiesuahruefutohkun = '(\S+)'", r.text)
-        shiesuahruefutohkun = m.group(0).split(' = ')[1].replace("'", "")
+        if verbose:
+            print(r.status_code)
+            print(r.text[:2000])
+        # m = re.search("shiesuahruefutohkun = '(\S+)'", r.text)
+        # shiesuahruefutohkun = m.group(0).split(' = ')[1].replace("'", "")
         #if verbose:
         #    print(shiesuahruefutohkun)
 
@@ -209,7 +210,7 @@ def loe_logiandmed_veebist(verbose=True):
         items = '%2C'.join([f'{n}' for n in range(0, 81)])  # '%2C' = ','
         logItems = '%7B%22logItems%22%3A%5B' + items + '%5D%7D'  # '{"logItems":[' + items + ']}'
 
-        PARAMS = f"var.deviceId={deviceId}&var.target=0&var.startDate={logDate}&var.logItems={logItems}&shiesuahruefutohkun={shiesuahruefutohkun}"
+        PARAMS = f"var.deviceId={deviceId}&var.target=0&var.startDate={logDate}&var.logItems={logItems}"
         logiandmed_raw = session.post(
             '?'.join([LOGINFO_URL, PARAMS]),
             headers=headers
@@ -605,7 +606,7 @@ def update_db():
         kuup2ev += timedelta(days=1)
     
 if __name__ == "__main__":
-    # data = loe_logiandmed_veebist(hours=12, verbose=True)
+    data = loe_logiandmed_veebist(verbose=True)
     # update_db()
-    read_aquarea_data_from_pickle()
+    # read_aquarea_data_from_pickle()
     # print(get_con_per_1h(temp=0.0))
